@@ -1,15 +1,12 @@
-class MAMagnitudeDescription extends MAElementDescription {
-  magritteDescription() {
-    const MAMagnitudeDescription_selfdesc = require('Magritte.descriptions.MAMagnitudeDescription_selfdesc')
-    return MAMagnitudeDescription_selfdesc.magritteDescription(this, super.magritteDescription())
-  }
+import { MAElementDescription } from './MAElementDescription.js'
 
+export class MAMagnitudeDescription extends MAElementDescription {
   isSortable() {
     return true
   }
 
-  isWithinRange(anObject) {
-    return (this.min === null || this.min <= anObject) && (this.max === null || this.max >= anObject)
+  isWithinRange(val) {
+    return (this.min === null || this.min <= val) && (this.max === null || this.max >= val)
   }
 
   get max() {
@@ -20,8 +17,8 @@ class MAMagnitudeDescription extends MAElementDescription {
     }
   }
 
-  set max(anObjectOrNone) {
-    this._max = anObjectOrNone
+  set max(val) {
+    this._max = val
   }
 
   static defaultMax() {
@@ -36,23 +33,24 @@ class MAMagnitudeDescription extends MAElementDescription {
     }
   }
 
-  set min(anObjectOrNone) {
-    this._min = anObjectOrNone
+  set min(val) {
+    this._min = val
   }
 
   static defaultMin() {
     return null
   }
 
-  setMinMax(aMinimumObject, aMaximumObject) {
-    this.min = aMinimumObject
-    this.max = aMaximumObject
+  setMinMax(minVal, maxVal) {
+    this.min = minVal
+    this.max = maxVal
   }
 
   get rangeErrorMessage() {
     try {
       return this._rangeErrorMessage
     } catch (error) {
+      console.log('error', error)
       const min = this.min
       const max = this.max
 
@@ -71,22 +69,22 @@ class MAMagnitudeDescription extends MAElementDescription {
     }
   }
 
-  set rangeErrorMessage(aString) {
-    this._rangeErrorMessage = aString
-  }
-
-  _validateSpecific(model) {
-    if (!this.isWithinRange(model)) {
-      return [
-        ...super._validateSpecific(model),
-        new MARangeError(this.rangeErrorMessage, this)
-      ]
-    }
-
-    return super._validateSpecific(model)
-  }
-
-  acceptMagritte(aVisitor) {
-    aVisitor.visitMagnitudeDescription(this)
+  set rangeErrorMessage(message) {
+    this._rangeErrorMessage = message
   }
 }
+
+function init() {
+  const magnitudeDescription = new MAMagnitudeDescription()
+
+  magnitudeDescription.setMinMax(1, 10)
+
+  console.log('===MAMagnitudeDescription===')
+  console.log('isSortable:', magnitudeDescription.isSortable())
+  console.log('isWithinRange:', magnitudeDescription.isWithinRange(5))
+  console.log('min:', magnitudeDescription.min)
+  console.log('max:', magnitudeDescription.max)
+  console.log('===MAMagnitudeDescription end===\n')
+}
+
+init()

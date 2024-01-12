@@ -1,3 +1,5 @@
+import { MAElementDescription } from './MAElementDescription.js'
+
 class MAStringDescription extends MAElementDescription {
   static isAbstract() {
     return false
@@ -10,8 +12,14 @@ class MAStringDescription extends MAElementDescription {
   isSortable() {
     return true
   }
-
-  acceptMagritte(aVisitor) {
-    aVisitor.visitStringDescription(this)
-  }
 }
+
+function init() {
+  const stringDescription = new MAStringDescription()
+
+  console.log('===MAStringDescription===')
+  console.log('isSortable:', stringDescription.isSortable())
+  console.log('===MAStringDescription end===\n')
+}
+
+init()

@@ -1,37 +1,10 @@
-class MAContainer extends MADescription {
-  magritteDescription() {
-    const MAContainer_selfdesc = require('Magritte.descriptions.MAContainer_selfdesc')
-    return MAContainer_selfdesc.magritteDescription(this, super.magritteDescription())
-  }
-
+class MAContainer {
   static isAbstract() {
     return false
   }
 
-  constructor(kwargs) {
-    this._children = this.defaultCollection()
-    super(kwargs)
-  }
-
-  __eq__(other) {
-    return super.__eq__(other) && this._children == other.children
-  }
-
-  __iadd__(anItem) {
-    this.append(anItem)
-    return this
-  }
-
-  __contains__(item) {
-    return this._children.includes(item)
-  }
-
-  __len__() {
-    return this._children.length
-  }
-
-  __getitem__(item) {
-    return this._children[item]
+  constructor() {
+    this._children = this.constructor.defaultCollection()
   }
 
   __copy__() {
@@ -126,6 +99,7 @@ class MAContainer extends MADescription {
 
     return result
   }
+
   reject(aBlock) {
     const result = this.__copy__()
     const items = this.children.filter((item) => !aBlock(item))
@@ -134,6 +108,7 @@ class MAContainer extends MADescription {
 
     return result
   }
+
   copyEmpty() {
     const result = this.__copy__()
 
@@ -141,6 +116,7 @@ class MAContainer extends MADescription {
 
     return result
   }
+
   copyRange(aStartIndex, anEndIndex) {
     const result = this.__copy__()
     const items = this.children.slice(aStartIndex, anEndIndex + 1)
@@ -149,25 +125,40 @@ class MAContainer extends MADescription {
 
     return result
   }
+
   copyWithout(anObject) {
     return this.reject((item) => item === anObject)
   }
+
   copyWithoutAll(aCollection) {
     return this.reject((item) => aCollection.includes(item))
   }
+
   detect(aBlock) {
     return this.children.find((item) => aBlock(item))
   }
+
   detectIfNone(aBlock, anExceptionBlock) {
     return this.children.find((item) => aBlock(item)) || anExceptionBlock()
   }
+
   do(aBlock) {
     this.children.forEach((item) => aBlock(item))
   }
+
   keysAndValuesDo(aBlock) {
     this.children.forEach((item, idx) => aBlock(idx, item))
   }
-  acceptMagritte(aVisitor) {
-    aVisitor.visitContainer(this)
-  }
 }
+
+function init() {
+  const container = new MAContainer()
+
+  console.log('===MADescription===')
+  console.log('isEmpty:', container.isEmpty())
+  console.log('isContainer:', container.isContainer())
+  console.log('hasChildren:', container.hasChildren())
+  console.log('===MADescription end===\n')
+}
+
+init()

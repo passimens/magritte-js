@@ -1,9 +1,6 @@
-class MAElementDescription extends MADescription {
-  magritteDescription() {
-    const MAElementDescription_selfdesc = require('Magritte.descriptions.MAElementDescription_selfdesc')
-    return MAElementDescription_selfdesc.magritteDescription(this, super.magritteDescription())
-  }
+import { MADescription } from './MADescription.js'
 
+export class MAElementDescription extends MADescription {
   get default() {
     try {
       return this._default
@@ -12,21 +9,11 @@ class MAElementDescription extends MADescription {
     }
   }
 
-  get defaultStringReader() {
-    const MAStringReaderVisitor = require('Magritte.visitors.MAStringWriterReader_visitors.MAStringReaderVisitor')
-    return MAStringReaderVisitor
-  }
-
-  get defaultStringWriter() {
-    const MAStringWriterVisitor = require('Magritte.visitors.MAStringWriterReader_visitors.MAStringWriterVisitor')
-    return MAStringWriterVisitor
-  }
-
   get stringWriter() {
     try {
       return this._stringWriter
     } catch (error) {
-      return this.defaultStringWriter()
+      return null
     }
   }
 
@@ -34,35 +21,38 @@ class MAElementDescription extends MADescription {
     try {
       return this._stringReader
     } catch (error) {
-      return this.defaultStringReader()
+      return null
     }
   }
 
-  set stringReader(anObject) {
-    this._stringReader = anObject
+  set stringReader(data) {
+    this._stringReader = data
   }
 
-  set stringWriter(anObject) {
-    this._stringWriter = anObject
+  set stringWriter(data) {
+    this._stringWriter = data
   }
 
-  set default(anObject) {
-    this._default = anObject
+  set default(data) {
+    this._default = data
   }
 
   static defaultDefault() {
     return null
   }
-
-  acceptMagritte(aVisitor) {
-    aVisitor.visitElementDescription(this)
-  }
-
-  writeString(aModel) {
-    return this.stringWriter.write_str({ model: aModel, description: this })
-  }
-
-  readString(aModel) {
-    return this.stringReader.read_str({ model: aModel, description: this })
-  }
 }
+
+function init() {
+  const elementDescription = new MAElementDescription()
+
+  console.log('===MAElementDescription===')
+  console.log('default:', elementDescription.default)
+  elementDescription.default = { a: 1, b: 2 }
+  console.log('default:', elementDescription.default)
+  console.log('\nstringWriter:', elementDescription.stringWriter)
+  elementDescription.stringWriter = 'some string'
+  console.log('stringWriter:', elementDescription.stringWriter)
+  console.log('===MAElementDescription end===\n')
+}
+
+init()

@@ -8,8 +8,4 @@ class MADateAndTimeDescription extends MAMagnitudeDescription {
   static isAbstract() {
     return false
   }
-
-  acceptMagritte(aVisitor) {
-    aVisitor.visitDateAndTimeDescription(this)
-  }
 }

@@ -1,7 +1,4 @@
-class MADescription extends MAModel {
-  magritteDescription() {
-    return MADescription_selfdesc.magritteDescription(this)
-  }
+export class MADescription {
   static isAbstract() {
     return true
   }
@@ -10,59 +7,15 @@ class MADescription extends MAModel {
     return this.constructor.name
   }
 
-  constructor(kwargs) {
-    super()
-    this._accessor = this.defaultAccessor()
-
-    for (let key in kwargs) {
-      const value = kwargs[key]
+  constructor(args) {
+    for (let key in args) {
+      const value = args[key]
       const attr = this.constructor[key]
 
       if (attr instanceof Property) {
         this[key] = value
       }
     }
-  }
-
-  __eq__(other) {
-    return this.constructor === other.constructor && this.accessor === other.accessor
-  }
-
-  __hash__() {
-    const h1 = this.constructor.hashCode()
-    const h2 = this.accessor.hashCode()
-
-    return h1 ^ h2
-  }
-
-  __lt__(other) {
-    return this.priority < other.priority
-  }
-
-  __copy__() {
-    const clone = new this.constructor()
-
-    Object.assign(clone, this)
-    clone.accessor = this.accessor.copy()
-
-    return clone
-  }
-
-  get accessor() {
-    return this._accessor
-  }
-
-  set accessor(anObject) {
-    if (typeof anObject === 'string') {
-      this._accessor = new MAAttrAccessor(anObject)
-      return
-    }
-
-    this._accessor = anObject
-  }
-
-  static defaultAccessor() {
-    return new MANullAccessor()
   }
 
   get kind() {
@@ -97,8 +50,8 @@ class MADescription extends MAModel {
     }
   }
 
-  set readOnly(aBool) {
-    this._readOnly = aBool
+  set readOnly(val) {
+    this._readOnly = val
   }
 
   static defaultReadOnly() {
@@ -166,17 +119,16 @@ class MADescription extends MAModel {
     try {
       return this._name
     } catch (error) {
-      return this.accessor.name
+      return this.defaultName()
     }
   }
 
-  set name(aSymbol) {
-    if (aSymbol === null) {
-      this._name = null
-      return
-    }
+  set name(val) {
+    this._name = val
+  }
 
-    this._name = intern(aSymbol)
+  static defaultName() {
+    return null
   }
 
   get comment() {
@@ -187,8 +139,8 @@ class MADescription extends MAModel {
     }
   }
 
-  set comment(aStr) {
-    this._comment = aStr
+  set comment(str) {
+    this._comment = str
   }
 
   static defaultComment() {
@@ -207,8 +159,8 @@ class MADescription extends MAModel {
     }
   }
 
-  set group(aStr) {
-    this._group = aStr
+  set group(str) {
+    this._group = str
   }
 
   static defaultGroup() {
@@ -223,12 +175,12 @@ class MADescription extends MAModel {
     }
   }
 
-  set label(aStr) {
-    this._label = aStr
+  set label(str) {
+    this._label = str
   }
 
   static defaultLabel() {
-    return intern('')
+    return ''
   }
 
   hasLabel() {
@@ -243,8 +195,8 @@ class MADescription extends MAModel {
     }
   }
 
-  set priority(aNumber) {
-    this._priority = aNumber
+  set priority(val) {
+    this._priority = val
   }
 
   static defaultPriority() {
@@ -259,8 +211,8 @@ class MADescription extends MAModel {
     }
   }
 
-  set visible(aBool) {
-    this._visible = aBool
+  set visible(val) {
+    this._visible = val
   }
 
   static defaultVisible() {
@@ -311,11 +263,8 @@ class MADescription extends MAModel {
   }
 
   addCondition(condition, label = null) {
-    if (label === null) {
-      label = getattr(condition, intern('label'), null)
-    }
-
-    this.conditions.push((condition, label))
+    console.log('addCondition this', this)
+    this.conditions.push({ condition, label })
   }
 
   get undefined() {
@@ -330,16 +279,16 @@ class MADescription extends MAModel {
     return result === null ? this.defaultUndefined() : result
   }
 
-  set undefined(aStr) {
-    this._undefined_set(aStr)
+  set undefined(str) {
+    this._undefined_set(str)
   }
 
-  _undefined_set(aStr) {
-    this._undefined = aStr
+  _undefined_set(str) {
+    this._undefined = str
   }
 
   static defaultUndefined() {
-    return intern('')
+    return ''
   }
 
   isContainer() {
@@ -349,8 +298,90 @@ class MADescription extends MAModel {
   isSortable() {
     return false
   }
-
-  acceptMagritte(aVisitor) {
-    aVisitor.visitDescription(this)
-  }
 }
+
+function init() {
+  const description = new MADescription()
+
+  description.kind = { a: 1 }
+
+  console.log('===MADescription===')
+  console.log('type:', description.type)
+  console.log('kind:', description.kind)
+  console.log('isKindDefined:', description.isKindDefined())
+
+  console.log('\nisReadOnly:', description.isReadOnly())
+  description.beReadOnly()
+  console.log('set beReadOnly')
+  console.log('isReadOnly:', description.isReadOnly())
+  description.beWriteable()
+  console.log('set beWriteable')
+  console.log('isReadOnly:', description.isReadOnly())
+  description.readOnly = true
+  console.log('set readOnly to true')
+  console.log('get readOnly:', description.readOnly)
+
+  console.log('\nisRequired:', description.isRequired())
+  description.beRequired()
+  console.log('set beRequired')
+  console.log('isRequired:', description.isRequired())
+  description.beOptional()
+  console.log('set beOptional')
+  console.log('isRequired:', description.isRequired())
+  description.required = true
+  console.log('set required to true')
+  console.log('get required:', description.required)
+
+  console.log('\nisVisible:', description.isVisible())
+  description.beVisible()
+  console.log('set beVisible')
+  console.log('isVisible:', description.isVisible())
+  description.beHidden()
+  console.log('set beHidden')
+  console.log('isVisible:', description.isVisible())
+  description.visible = true
+  console.log('set visible to true')
+  console.log('get visible:', description.visible)
+
+  console.log('\nname:', description.name)
+  description.name = 'some name'
+  console.log('name:', description.name)
+
+  console.log('\ncomment:', description.comment)
+  console.log('hasComment:', description.hasComment())
+
+  description.comment = 'some comment'
+  console.log('comment:', description.comment)
+  console.log('hasComment:', description.hasComment())
+
+  console.log('\ngroup:', description.group)
+  description.group = 'some group'
+  console.log('group:', description.group)
+
+  console.log('\nhasLabel:', description.hasLabel())
+  console.log('label:', description.label)
+  description.label = 'some label'
+  console.log('label:', description.label)
+  console.log('hasLabel:', description.hasLabel())
+
+  console.log('\npriority:', description.priority)
+  description.priority = 999
+  console.log('priority:', description.priority)
+
+  console.log('\nconditions:', description.conditions)
+  description.conditions = [
+    ['some condition', 123]
+  ]
+  console.log('conditions:', description.conditions)
+
+  console.log('\nundefined:', description.undefined)
+  description.undefined = 'some undefined value'
+  console.log('undefined:', description.undefined)
+
+  console.log('\nisContainer:', description.isContainer())
+  console.log('isSortable:', description.isSortable())
+
+  console.log('===MADescription end===\n')
+}
+
+// init()

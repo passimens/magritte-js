@@ -1,3 +1,5 @@
+import { MANumberDescription } from './MANumberDescription.js'
+
 class MAIntDescription extends MANumberDescription {
   static isAbstract() {
     return false
@@ -6,8 +8,14 @@ class MAIntDescription extends MANumberDescription {
   static defaultKind() {
     return Number
   }
-
-  acceptMagritte(aVisitor) {
-    aVisitor.visitIntDescription(this)
-  }
 }
+
+function init() {
+  const intDescription = new MAIntDescription()
+
+  console.log('===MAIntDescription===')
+  console.log(intDescription)
+  console.log('===MAIntDescription end===\n')
+}
+
+init()
