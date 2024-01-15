@@ -1,6 +1,4 @@
-import { MAElementDescription } from './MAElementDescription.js'
-
-export class MAMagnitudeDescription extends MAElementDescription {
+class MAMagnitudeDescription extends MAElementDescription {
   isSortable() {
     return true
   }
@@ -73,18 +71,3 @@ export class MAMagnitudeDescription extends MAElementDescription {
     this._rangeErrorMessage = message
   }
 }
-
-function init() {
-  const magnitudeDescription = new MAMagnitudeDescription()
-
-  magnitudeDescription.setMinMax(1, 10)
-
-  console.log('===MAMagnitudeDescription===')
-  console.log('isSortable:', magnitudeDescription.isSortable())
-  console.log('isWithinRange:', magnitudeDescription.isWithinRange(5))
-  console.log('min:', magnitudeDescription.min)
-  console.log('max:', magnitudeDescription.max)
-  console.log('===MAMagnitudeDescription end===\n')
-}
-
-init()

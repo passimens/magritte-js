@@ -1,9 +1,10 @@
-class MAContainer {
+class MAContainer extends MADescription {
   static isAbstract() {
     return false
   }
 
   constructor() {
+    super()
     this._children = this.constructor.defaultCollection()
   }
 
@@ -150,15 +151,3 @@ class MAContainer {
     this.children.forEach((item, idx) => aBlock(idx, item))
   }
 }
-
-function init() {
-  const container = new MAContainer()
-
-  console.log('===MADescription===')
-  console.log('isEmpty:', container.isEmpty())
-  console.log('isContainer:', container.isContainer())
-  console.log('hasChildren:', container.hasChildren())
-  console.log('===MADescription end===\n')
-}
-
-init()

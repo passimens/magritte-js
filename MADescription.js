@@ -1,4 +1,4 @@
-export class MADescription {
+class MADescription {
   static isAbstract() {
     return true
   }
@@ -7,23 +7,18 @@ export class MADescription {
     return this.constructor.name
   }
 
-  constructor(args) {
-    for (let key in args) {
-      const value = args[key]
-      const attr = this.constructor[key]
-
-      if (attr instanceof Property) {
-        this[key] = value
-      }
+  constructor(args = {}) {
+    for (const [key, value] of Object.entries(args)) {
+      this[key] = value
     }
   }
 
   get kind() {
-    try {
-      return this._kind
-    } catch (error) {
-      return this.defaultKind()
+    if (this._kind === undefined) {
+      return this.constructor.defaultKind()
     }
+
+    return this._kind
   }
 
   set kind(aClass) {
@@ -43,11 +38,11 @@ export class MADescription {
   }
 
   get readOnly() {
-    try {
-      return this._readOnly
-    } catch (error) {
-      return this.defaultReadOnly()
+    if (this._readOnly === undefined) {
+      return this.constructor.defaultReadOnly()
     }
+
+    return this._readOnly
   }
 
   set readOnly(val) {
@@ -71,11 +66,10 @@ export class MADescription {
   }
 
   get required() {
-    try {
-      return this._required
-    } catch (error) {
-      return this.defaultRequired()
+    if (this._required === undefined) {
+      return this.constructor.defaultRequired()
     }
+    return this._required
   }
 
   set required(aBool) {
@@ -99,12 +93,14 @@ export class MADescription {
   }
 
   get undefinedValue() {
-    try {
-      let result = this._undefinedValue
-    } catch (error) {
-      let result = this.defaultUndefinedValue()
+    let result = null
+    if (this._undefinedValue === undefined) {
+      result = this.constructor.defaultUndefinedValue()
+    } else {
+      result = this._undefinedValue
     }
-    return result === null ? this.defaultUndefinedValue() : result
+
+    return result === null ? this.constructor.defaultUndefinedValue() : result
   }
 
   set undefinedValue(anObject) {
@@ -116,11 +112,11 @@ export class MADescription {
   }
 
   get name() {
-    try {
-      return this._name
-    } catch (error) {
-      return this.defaultName()
+    if (this._name === undefined) {
+      return this.constructor.defaultName()
     }
+
+    return this._name
   }
 
   set name(val) {
@@ -132,11 +128,11 @@ export class MADescription {
   }
 
   get comment() {
-    try {
-      return this._comment
-    } catch (error) {
-      return this.defaultComment()
+    if (this._comment === undefined) {
+      return this.constructor.defaultComment()
     }
+
+    return this._comment
   }
 
   set comment(str) {
@@ -152,11 +148,11 @@ export class MADescription {
   }
 
   get group() {
-    try {
-      return this._group
-    } catch (error) {
-      return this.defaultGroup()
+    if (this._group === undefined) {
+      return this.constructor.defaultGroup()
     }
+
+    return this._group
   }
 
   set group(str) {
@@ -168,11 +164,11 @@ export class MADescription {
   }
 
   get label() {
-    try {
-      return this._label
-    } catch (error) {
-      return this.defaultLabel()
+    if (this._label === undefined) {
+      return this.constructor.defaultLabel()
     }
+
+    return this._label
   }
 
   set label(str) {
@@ -188,11 +184,11 @@ export class MADescription {
   }
 
   get priority() {
-    try {
-      return this._priority
-    } catch (error) {
-      return this.defaultPriority()
+    if (this._priority === undefined) {
+      return this.constructor.defaultPriority()
     }
+
+    return this._priority
   }
 
   set priority(val) {
@@ -204,11 +200,11 @@ export class MADescription {
   }
 
   get visible() {
-    try {
-      return this._visible
-    } catch (error) {
-      return this.defaultVisible()
+    if (this._visible === undefined) {
+      return this.constructor.defaultVisible()
     }
+
+    return this._visible
   }
 
   set visible(val) {
@@ -232,17 +228,17 @@ export class MADescription {
   }
 
   get conditions() {
-    try {
-      return this._conditions
-    } catch (error) {
-      this._conditions = this.defaultConditions()
+    if (this._conditions === undefined) {
+      this._conditions = this.constructor.defaultConditions()
       return this._conditions
     }
+
+    return this._conditions
   }
 
   set conditions(conditions) {
     if (conditions === null) {
-      this._conditions = this.defaultConditions()
+      this._conditions = this.constructor.defaultConditions()
       return
     }
 
@@ -250,11 +246,11 @@ export class MADescription {
 
     for (let item of conditions) {
       if (item instanceof Array) {
-        this.addCondition(item[0], item[1])
+        this.constructor.addCondition(item[0], item[1])
         return
       }
 
-      this.addCondition(item)
+      this.constructor.addCondition(item)
     }
   }
 
@@ -263,17 +259,16 @@ export class MADescription {
   }
 
   addCondition(condition, label = null) {
-    console.log('addCondition this', this)
     this.conditions.push({ condition, label })
   }
 
   get undefined() {
     let result = null
 
-    try {
+    if (this._undefined === undefined) {
+      result = this.constructor.defaultUndefined()
+    } else {
       result = this._undefined
-    } catch (error) {
-      result = this.defaultUndefined()
     }
 
     return result === null ? this.defaultUndefined() : result
@@ -299,89 +294,3 @@ export class MADescription {
     return false
   }
 }
-
-function init() {
-  const description = new MADescription()
-
-  description.kind = { a: 1 }
-
-  console.log('===MADescription===')
-  console.log('type:', description.type)
-  console.log('kind:', description.kind)
-  console.log('isKindDefined:', description.isKindDefined())
-
-  console.log('\nisReadOnly:', description.isReadOnly())
-  description.beReadOnly()
-  console.log('set beReadOnly')
-  console.log('isReadOnly:', description.isReadOnly())
-  description.beWriteable()
-  console.log('set beWriteable')
-  console.log('isReadOnly:', description.isReadOnly())
-  description.readOnly = true
-  console.log('set readOnly to true')
-  console.log('get readOnly:', description.readOnly)
-
-  console.log('\nisRequired:', description.isRequired())
-  description.beRequired()
-  console.log('set beRequired')
-  console.log('isRequired:', description.isRequired())
-  description.beOptional()
-  console.log('set beOptional')
-  console.log('isRequired:', description.isRequired())
-  description.required = true
-  console.log('set required to true')
-  console.log('get required:', description.required)
-
-  console.log('\nisVisible:', description.isVisible())
-  description.beVisible()
-  console.log('set beVisible')
-  console.log('isVisible:', description.isVisible())
-  description.beHidden()
-  console.log('set beHidden')
-  console.log('isVisible:', description.isVisible())
-  description.visible = true
-  console.log('set visible to true')
-  console.log('get visible:', description.visible)
-
-  console.log('\nname:', description.name)
-  description.name = 'some name'
-  console.log('name:', description.name)
-
-  console.log('\ncomment:', description.comment)
-  console.log('hasComment:', description.hasComment())
-
-  description.comment = 'some comment'
-  console.log('comment:', description.comment)
-  console.log('hasComment:', description.hasComment())
-
-  console.log('\ngroup:', description.group)
-  description.group = 'some group'
-  console.log('group:', description.group)
-
-  console.log('\nhasLabel:', description.hasLabel())
-  console.log('label:', description.label)
-  description.label = 'some label'
-  console.log('label:', description.label)
-  console.log('hasLabel:', description.hasLabel())
-
-  console.log('\npriority:', description.priority)
-  description.priority = 999
-  console.log('priority:', description.priority)
-
-  console.log('\nconditions:', description.conditions)
-  description.conditions = [
-    ['some condition', 123]
-  ]
-  console.log('conditions:', description.conditions)
-
-  console.log('\nundefined:', description.undefined)
-  description.undefined = 'some undefined value'
-  console.log('undefined:', description.undefined)
-
-  console.log('\nisContainer:', description.isContainer())
-  console.log('isSortable:', description.isSortable())
-
-  console.log('===MADescription end===\n')
-}
-
-// init()

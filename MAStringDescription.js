@@ -1,5 +1,3 @@
-import { MAElementDescription } from './MAElementDescription.js'
-
 class MAStringDescription extends MAElementDescription {
   static isAbstract() {
     return false
@@ -13,13 +11,3 @@ class MAStringDescription extends MAElementDescription {
     return true
   }
 }
-
-function init() {
-  const stringDescription = new MAStringDescription()
-
-  console.log('===MAStringDescription===')
-  console.log('isSortable:', stringDescription.isSortable())
-  console.log('===MAStringDescription end===\n')
-}
-
-init()

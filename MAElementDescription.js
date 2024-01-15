@@ -1,6 +1,4 @@
-import { MADescription } from './MADescription.js'
-
-export class MAElementDescription extends MADescription {
+class MAElementDescription extends MADescription {
   get default() {
     try {
       return this._default
@@ -41,18 +39,3 @@ export class MAElementDescription extends MADescription {
     return null
   }
 }
-
-function init() {
-  const elementDescription = new MAElementDescription()
-
-  console.log('===MAElementDescription===')
-  console.log('default:', elementDescription.default)
-  elementDescription.default = { a: 1, b: 2 }
-  console.log('default:', elementDescription.default)
-  console.log('\nstringWriter:', elementDescription.stringWriter)
-  elementDescription.stringWriter = 'some string'
-  console.log('stringWriter:', elementDescription.stringWriter)
-  console.log('===MAElementDescription end===\n')
-}
-
-init()
