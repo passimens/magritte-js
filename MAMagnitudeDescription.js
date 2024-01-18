@@ -8,11 +8,11 @@ class MAMagnitudeDescription extends MAElementDescription {
   }
 
   get max() {
-    try {
-      return this._max
-    } catch (error) {
+    if (this._max === undefined) {
       return this.defaultMax()
     }
+
+    return this._max
   }
 
   set max(val) {
@@ -24,11 +24,11 @@ class MAMagnitudeDescription extends MAElementDescription {
   }
 
   get min() {
-    try {
-      return this._min
-    } catch (error) {
+    if (this._min === undefined) {
       return this.defaultMin()
     }
+
+    return this._min
   }
 
   set min(val) {
@@ -45,26 +45,25 @@ class MAMagnitudeDescription extends MAElementDescription {
   }
 
   get rangeErrorMessage() {
-    try {
+    if (this._rangeErrorMessage) {
       return this._rangeErrorMessage
-    } catch (error) {
-      console.log('error', error)
-      const min = this.min
-      const max = this.max
-
-      if (min !== null) {
-        if (max !== null) {
-          return `Input must be between ${min} and ${max}`
-        }
-        return `Input must be above or equal to ${min}`
-      }
-
-      if (max !== null) {
-        return `Input must be below or equal to ${max}`
-      }
-
-      return null
     }
+
+    const min = this.min
+    const max = this.max
+
+    if (min !== null) {
+      if (max !== null) {
+        return `Input must be between ${min} and ${max}`
+      }
+      return `Input must be above or equal to ${min}`
+    }
+
+    if (max !== null) {
+      return `Input must be below or equal to ${max}`
+    }
+
+    return null
   }
 
   set rangeErrorMessage(message) {
