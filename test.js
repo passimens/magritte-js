@@ -1,23 +1,27 @@
-const object = {
-  uid: 3,
-  name: 'Alex Kabanets',
-  dob: '01.01.1990',
-  height: 180.5
-}
+import data from './test-data.json' assert { type: 'json' }
 
 const description = new MAContainer()
-const str = new MAStringDescription({ name: 'name', undefined: 'N/A' })
+const descriptionChilds = data.descriptionChilds
 
-description.setChildren([
-  new MAIntDescription({ name: 'uid', label: 'Uid', visible: false }),
-  new MAStringDescription({ name: 'name', undefined: 'N/A', comment: 'comment name', priority: 1, required: true }),
-  new MADateAndTimeDescription({ name: 'dob', label: 'Date of birth', priority: 0 }),
-  new MAIntDescription({ name: 'height', label: 'Height', priority: 2 }),
-  new MADateAndTimeDescription({ name: 'last_updated', label: 'Last Updated', visible: false })
-])
+for (const child of descriptionChilds) {
+  description.append(getClassInstance(Object.keys(child)[0], Object.values(child)[0]))
+}
 
+viewGenerator(data.object, description)
 
-viewGenerator(object, description)
+function getClassInstance(className, args) {
+  switch (className) {
+    case 'MAIntDescription':
+      return new MAIntDescription(args)
+      break;
+    case 'MAStringDescription':
+      return new MAStringDescription(args)
+      break;
+    case 'MADateAndTimeDescription':
+      return new MADateAndTimeDescription(args)
+      break;
+  }
+}
 
 function viewGenerator(object, description) {
   const view = document.getElementById('view')
