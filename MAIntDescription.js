@@ -1,3 +1,4 @@
+
 class MAIntDescription extends MANumberDescription {
   static isAbstract() {
     return false

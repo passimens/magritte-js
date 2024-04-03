@@ -1,41 +1,70 @@
-class MAElementDescription extends MADescription {
+
+import { MADescription } from './MADescription.js';
+import { MAStringReaderVisitor } from './MAStringReaderVisitor.js'
+import { MAStringWriterVisitor } from './MAStringWriterVisitor.js'
+
+
+export class MAElementDescription extends MADescription
+{
+  #default = undefined;
+  #stringReader = undefined;
+  #stringWriter = undefined;
+
   get default() {
-    try {
-      return this._default
-    } catch (error) {
-      return this.defaultDefault()
+    if (typeof(this.#default) === 'undefined') {
+      return this.constructor.defaultDefault();
     }
-  }
-
-  get stringWriter() {
-    try {
-      return this._stringWriter
-    } catch (error) {
-      return null
-    }
-  }
-
-  get stringReader() {
-    try {
-      return this._stringReader
-    } catch (error) {
-      return null
-    }
-  }
-
-  set stringReader(data) {
-    this._stringReader = data
-  }
-
-  set stringWriter(data) {
-    this._stringWriter = data
+    return this.#default;
   }
 
   set default(data) {
-    this._default = data
+    this.#default = data;
   }
 
   static defaultDefault() {
-    return null
+    return null;
   }
+
+  get stringReader() {
+    if (typeof(this.#stringReader) === 'undefined') {
+      return this.constructor.defaultStringReader();
+    }
+    return this.#stringReader;
+  }
+
+  set stringReader(data) {
+    this.#stringReader = data;
+  }
+
+  static defaultStringReader() {
+    return new MAStringReaderVisitor();
+  }
+
+  get stringWriter() {
+    if (typeof(this.#stringWriter) === 'undefined') {
+      return this.constructor.defaultStringWriter();
+    }
+    return this.#stringWriter;
+  }
+
+  set stringWriter(data) {
+    this.#stringWriter = data;
+  }
+
+  static defaultStringWriter() {
+    return new MAStringWriterVisitor();
+  }
+
+  acceptMagritte(aVisitor) {
+    aVisitor.visitElementDescription(this);
+  }
+
+  writeString(aModel) {
+    this.stringWriter.write_str(aModel, this);
+  }
+
+  readString(aModel) {
+    return this.stringReader.read_str(aModel, this);
+  }
+
 }

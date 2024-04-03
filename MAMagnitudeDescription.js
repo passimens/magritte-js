@@ -1,3 +1,4 @@
+
 class MAMagnitudeDescription extends MAElementDescription {
   isSortable() {
     return true

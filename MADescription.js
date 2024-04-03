@@ -1,296 +1,302 @@
-class MADescription {
+
+export class MADescription
+{
   static isAbstract() {
-    return true
+    return true;
   }
 
-  get type() {
-    return this.constructor.name
-  }
+  #kind = undefined;
+  #readOnly = undefined;
+  #required = undefined;
+  #undefinedValue = undefined;
+  #name = undefined;
+  #comment = undefined;
+  #group = undefined;
+  #label = undefined;
+  #priority = undefined;
+  #visible = undefined;
+  #conditions = undefined;
+  #undefined = undefined;
 
   constructor(args = {}) {
     for (const [key, value] of Object.entries(args)) {
-      this[key] = value
+      this[key] = value;
     }
+  }
+
+  get type() {
+    return this.constructor.name;
   }
 
   get kind() {
-    if (this._kind === undefined) {
-      return this.constructor.defaultKind()
+    if (typeof(this.#kind) === 'undefined') {
+      return this.constructor.defaultKind();
     }
 
-    return this._kind
+    return this.#kind;
   }
 
   set kind(aClass) {
-    this._kind = aClass
+    this.#kind = aClass;
   }
 
   static defaultKind() {
-    return Object
+    return Object;
   }
 
   isKindDefined() {
-    try {
-      return this._kind !== undefined
-    } catch (error) {
-      return false
-    }
+    return typeof(this.#kind) !== 'undefined';
   }
 
   get readOnly() {
-    if (this._readOnly === undefined) {
-      return this.constructor.defaultReadOnly()
+    if (typeof(this.#readOnly) === undefined) {
+      return this.constructor.defaultReadOnly();
     }
-
-    return this._readOnly
+    return this.#readOnly;
   }
 
   set readOnly(val) {
-    this._readOnly = val
+    this.#readOnly = val;
   }
 
   static defaultReadOnly() {
-    return false
+    return false;
   }
 
   isReadOnly() {
-    return this.readOnly
+    return this.readOnly;
   }
 
   beReadOnly() {
-    this.readOnly = true
+    this.readOnly = true;
   }
 
   beWriteable() {
-    this.readOnly = false
+    this.readOnly = false;
   }
 
   get required() {
-    if (this._required === undefined) {
-      return this.constructor.defaultRequired()
+    if (this.#required === undefined) {
+      return this.constructor.defaultRequired();
     }
-    return this._required
+    return this.#required;
   }
 
   set required(aBool) {
-    this._required = aBool
+    this.#required = aBool;
   }
 
   static defaultRequired() {
-    return false
+    return false;
   }
 
   isRequired() {
-    return this.required
+    return this.required;
   }
 
   beRequired() {
-    this.required = true
+    this.required = true;
   }
 
   beOptional() {
-    this.required = false
+    this.required = false;
   }
 
   get undefinedValue() {
-    let result = null
-    if (this._undefinedValue === undefined) {
-      result = this.constructor.defaultUndefinedValue()
+    let result = null;
+    if (typeof(this.#undefinedValue) === 'undefined') {
+      result = this.constructor.defaultUndefinedValue();
     } else {
-      result = this._undefinedValue
+      result = this.#undefinedValue;
     }
 
-    return result === null ? this.constructor.defaultUndefinedValue() : result
+    return result === null ? this.constructor.defaultUndefinedValue() : result;
   }
 
   set undefinedValue(anObject) {
-    this._undefinedValue = anObject
+    this.#undefinedValue = anObject;
   }
 
   static defaultUndefinedValue() {
-    return null
+    return null;
   }
 
   get name() {
-    if (this._name === undefined) {
-      return this.constructor.defaultName()
+    if (typeof(this.#name) === 'undefined') {
+      return this.constructor.defaultName();
     }
 
-    return this._name
+    return this.#name;
   }
 
   set name(val) {
-    this._name = val
+    this.#name = val;
   }
 
   static defaultName() {
-    return null
+    return null;
   }
 
   get comment() {
-    if (this._comment === undefined) {
-      return this.constructor.defaultComment()
+    if (typeof(this.#comment) === 'undefined') {
+      return this.constructor.defaultComment();
     }
 
-    return this._comment
+    return this.#comment;
   }
 
   set comment(str) {
-    this._comment = str
+    this.#comment = str;
   }
 
   static defaultComment() {
-    return null
+    return null;
   }
 
   hasComment() {
-    return Boolean(this.comment)
+    return Boolean(this.comment);
   }
 
   get group() {
-    if (this._group === undefined) {
-      return this.constructor.defaultGroup()
+    if (this.#group === undefined) {
+      return this.constructor.defaultGroup();
     }
 
-    return this._group
+    return this.#group;
   }
 
   set group(str) {
-    this._group = str
+    this.#group = str;
   }
 
   static defaultGroup() {
-    return null
+    return null;
   }
 
   get label() {
-    if (this._label === undefined) {
-      return this.constructor.defaultLabel()
+    if (typeof(this.#label) === 'undefined') {
+      return this.constructor.defaultLabel();
     }
 
-    return this._label
+    return this.#label;
   }
 
   set label(str) {
-    this._label = str
+    this.#label = str;
   }
 
   static defaultLabel() {
-    return ''
+    return '';
   }
 
   hasLabel() {
-    return Boolean(this.label)
+    return Boolean(this.label);
   }
 
   get priority() {
-    if (this._priority === undefined) {
-      return this.constructor.defaultPriority()
+    if (typeof(this.#priority) === 'undefined') {
+      return this.constructor.defaultPriority();
     }
 
-    return this._priority
+    return this.#priority;
   }
 
   set priority(val) {
-    this._priority = val
+    this.#priority = val;
   }
 
   static defaultPriority() {
-    return 0
+    return 0;
   }
 
   get visible() {
-    if (this._visible === undefined) {
-      return this.constructor.defaultVisible()
+    if (typeof(this.#visible) === 'undefined') {
+      return this.constructor.defaultVisible();
     }
 
-    return this._visible
+    return this.#visible;
   }
 
   set visible(val) {
-    this._visible = val
+    this.#visible = val;
   }
 
   static defaultVisible() {
-    return true
+    return true;
   }
 
   isVisible() {
-    return this.visible
+    return this.visible;
   }
 
   beVisible() {
-    this.visible = true
+    this.visible = true;
   }
 
   beHidden() {
-    this.visible = false
+    this.visible = false;
   }
 
   get conditions() {
-    if (this._conditions === undefined) {
-      this._conditions = this.constructor.defaultConditions()
-      return this._conditions
+    if (typeof(this.#conditions) === 'undefined') {
+      this.#conditions = this.constructor.defaultConditions();
+      return this.#conditions;
     }
 
-    return this._conditions
+    return this.#conditions;
   }
 
   set conditions(conditions) {
     if (conditions === null) {
-      this._conditions = this.constructor.defaultConditions()
-      return
+      this.#conditions = this.constructor.defaultConditions();
+      return;
     }
 
-    this._conditions = []
+    this.#conditions = [];
 
     for (let item of conditions) {
       if (item instanceof Array) {
-        this.constructor.addCondition(item[0], item[1])
-        return
+        this.constructor.addCondition(item[0], item[1]);
+        return;
       }
 
-      this.constructor.addCondition(item)
+      this.constructor.addCondition(item);
     }
   }
 
   static defaultConditions() {
-    return []
+    return [];
   }
 
   addCondition(condition, label = null) {
-    this.conditions.push({ condition, label })
+    this.conditions.push({ condition, label });
   }
 
   get undefined() {
-    let result = null
+    let result = null;
 
-    if (this._undefined === undefined) {
-      result = this.constructor.defaultUndefined()
+    if (typeof(this.#undefined) === 'undefined') {
+      result = this.constructor.defaultUndefined();
     } else {
-      result = this._undefined
+      result = this.#undefined;
     }
 
-    return result === null ? this.defaultUndefined() : result
+    return result === null ? this.defaultUndefined() : result;
   }
 
   set undefined(str) {
-    this._undefined_set(str)
-  }
-
-  _undefined_set(str) {
-    this._undefined = str
+    this.#undefined = str;
   }
 
   static defaultUndefined() {
-    return ''
+    return '';
   }
 
   isContainer() {
-    return false
+    return false;
   }
 
   isSortable() {
-    return false
+    return false;
   }
 }

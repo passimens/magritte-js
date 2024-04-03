@@ -1,3 +1,4 @@
+
 class MAStringDescription extends MAElementDescription {
   static isAbstract() {
     return false
