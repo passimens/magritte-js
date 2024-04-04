@@ -1,5 +1,8 @@
 
 import { MAValidatorVisitor } from '../visitors/MAValidatorVisitor.js'
+import { MAConditionError } from '../errors/MAConditionError.js';
+import { MAKindError } from '../errors/MAKindError.js';
+import { MARequiredError } from '../errors/MARequiredError.js';
 
 
 export class MADescription
@@ -21,6 +24,10 @@ export class MADescription
   #conditions = undefined;
   #undefined = undefined;
   #validator = undefined;
+  #requiredErrorMessage = undefined;
+  #kindErrorMessage = undefined;
+  #multipleErrorsMessage = undefined;
+  #conflictErrorMessage = undefined;
 
 
   constructor(args = {}) {
@@ -259,7 +266,7 @@ export class MADescription
     {
       this.#conditions = [];
 
-      for (let item of conditions)
+      for (const item of conditions)
       {
         if (item instanceof Array)
         {
@@ -317,6 +324,82 @@ export class MADescription
     aVisitor.visitDescription(this);
   }
 
+  get requiredErrorMessage()
+  {
+    if (typeof(this.#requiredErrorMessage) === 'undefined')
+    {
+      return this.defaultRequiredErrorMessage();
+    }
+    return this.#requiredErrorMessage;
+  }
+
+  set requiredErrorMessage(message)
+  {
+    this.#requiredErrorMessage = message;
+  }
+
+  static defaultRequiredErrorMessage(cls)
+  {
+    return 'Input is required but no input given';
+  }
+
+  get kindErrorMessage()
+  {
+    if (typeof(this.#kindErrorMessage) === 'undefined')
+    {
+      return this.defaultKindErrorMessage();
+    }
+    return this.#kindErrorMessage;
+  }
+
+  set kindErrorMessage(message)
+  {
+    this.#kindErrorMessage = message;
+  }
+
+  static defaultKindErrorMessage()
+  {
+    return 'Invalid input given - wrong type';
+  }
+
+  get multipleErrorsMessage()
+  {
+    if (typeof(this.#multipleErrorsMessage) === 'undefined')
+    {
+      return this.defaultMultipleErrorsMessage();
+    }
+    return this.#multipleErrorsMessage;
+  }
+
+  set multipleErrorsMessage(message)
+  {
+    this.#multipleErrorsMessage = message;
+  }
+
+  static defaultMultipleErrorsMessage()
+  {
+    return 'Multiple errors';
+  }
+
+  get conflictErrorMessage()
+  {
+    if (typeof(this.#conflictErrorMessage) === 'undefined')
+    {
+      return this.defaultConflictErrorMessage();
+    }
+    return this.#conflictErrorMessage;
+  }
+
+  set conflictErrorMessage(message)
+  {
+    this.#conflictErrorMessage = message;
+  }
+
+  static defaultConflictErrorMessage()
+  {
+    return 'Input is conflicting with concurrent modification';
+  }
+
   validate(model)
   {
     visitor = this.validator;
@@ -328,12 +411,60 @@ export class MADescription
   {
     if (this.isRequired() && typeof(model) === 'undefined')
     {
-      return [new MARequiredError(message=this.requiredErrorMessage, aDescription=this)];
+      return [new MARequiredError(this, this.requiredErrorMessage)];
     }
     else
     {
       return [];
     }
+  }
+
+  #validateKind(model)
+  {
+    if (model instanceof this.kind)
+    {
+      return [];
+    }
+    else
+    {
+      return [new MAKindError(this, this.kindErrorMessage)];
+    }
+  }
+
+  #validateSpecific(model)
+  {
+    // validates descriptions-specific conditions. Subclasses may override this method - see MAMAgnitudeDescription for example.
+    return [];
+  }
+
+  #validateConditions(model)
+  {
+    const errors = [];
+    for (const conditionTuple of this.conditions)
+    {
+      const condition = conditionTuple[0];
+      const label = conditionTuple[1];
+
+      try
+      {
+        if (!condition(model))
+        {
+          errors.push(new MAConditionError(this, label));
+        }
+      }
+      catch (e)
+      {
+        if (e instanceof MAValidationError)
+        {
+          errors.push(e);
+        }
+        else
+        {
+          throw e;
+        }
+      }
+    }
+    return errors;
   }
 
   get validator() {
@@ -351,5 +482,4 @@ export class MADescription
   {
     return MAValidatorVisitor;
   }
-
 }
