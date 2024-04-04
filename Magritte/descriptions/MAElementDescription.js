@@ -22,7 +22,7 @@ export class MAElementDescription extends MADescription
   }
 
   static defaultDefault() {
-    return null;
+    return undefined;
   }
 
   get stringReader() {

@@ -61,7 +61,7 @@ export class MADescription
   }
 
   get readOnly() {
-    if (typeof(this.#readOnly) === undefined) {
+    if (typeof(this.#readOnly) === 'undefined') {
       return this.constructor.defaultReadOnly();
     }
     return this.#readOnly;
@@ -88,7 +88,7 @@ export class MADescription
   }
 
   get required() {
-    if (this.#required === undefined) {
+    if (typeof(this.#required) === 'undefined') {
       return this.constructor.defaultRequired();
     }
     return this.#required;
