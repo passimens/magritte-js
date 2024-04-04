@@ -1,3 +1,9 @@
+
+import { MAContainer } from './Magritte/descriptions/MAContainer.js';
+import { MAIntDescription } from './Magritte/descriptions/MAIntDescription.js';
+import { MAStringDescription } from './Magritte/descriptions/MAStringDescription.js';
+import { MADateAndTimeDescription } from './Magritte/descriptions/MADateAndTimeDescription.js';
+
 import data from './test-data.json' assert { type: 'json' }
 
 const description = new MAContainer()
@@ -24,7 +30,7 @@ function getClassInstance(className, args) {
 }
 
 function viewGenerator(object, description) {
-  const view = document.getElementById('view')
+  //const view = document.getElementById('view')
   const childSorted = [...description.children].sort((a, b) => Number(a.priority) - Number(b.priority))
 
   for (const child of childSorted) {
@@ -33,7 +39,12 @@ function viewGenerator(object, description) {
     }
   }
 
-  function printRow(child, objectName) {
+  function printRow(child, objectName)
+  {
+    console.log(objectName, child.label, child.comment);
+  }
+
+  function printRow_html(child, objectName) {
     const row = document.createElement('p')
     const label = document.createElement('b')
     const name = document.createElement('span')

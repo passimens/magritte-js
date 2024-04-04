@@ -1,4 +1,7 @@
 
+import { MAValidatorVisitor } from '../visitors/MAValidatorVisitor.js'
+
+
 export class MADescription
 {
   static isAbstract() {
@@ -17,6 +20,8 @@ export class MADescription
   #visible = undefined;
   #conditions = undefined;
   #undefined = undefined;
+  #validator = undefined;
+
 
   constructor(args = {}) {
     for (const [key, value] of Object.entries(args)) {
@@ -103,14 +108,14 @@ export class MADescription
   }
 
   get undefinedValue() {
-    let result = null;
+    let result;
     if (typeof(this.#undefinedValue) === 'undefined') {
       result = this.constructor.defaultUndefinedValue();
     } else {
       result = this.#undefinedValue;
     }
 
-    return result === null ? this.constructor.defaultUndefinedValue() : result;
+    return (typeof(result) === 'undefined') ? this.constructor.defaultUndefinedValue() : result;
   }
 
   set undefinedValue(anObject) {
@@ -118,7 +123,7 @@ export class MADescription
   }
 
   static defaultUndefinedValue() {
-    return null;
+    return undefined;
   }
 
   get name() {
@@ -134,7 +139,7 @@ export class MADescription
   }
 
   static defaultName() {
-    return null;
+    return undefined;
   }
 
   get comment() {
@@ -150,7 +155,7 @@ export class MADescription
   }
 
   static defaultComment() {
-    return null;
+    return undefined;
   }
 
   hasComment() {
@@ -158,7 +163,7 @@ export class MADescription
   }
 
   get group() {
-    if (this.#group === undefined) {
+    if (typeof(this.#group) === 'undefined') {
       return this.constructor.defaultGroup();
     }
 
@@ -170,7 +175,7 @@ export class MADescription
   }
 
   static defaultGroup() {
-    return null;
+    return undefined;
   }
 
   get label() {
@@ -240,27 +245,31 @@ export class MADescription
   get conditions() {
     if (typeof(this.#conditions) === 'undefined') {
       this.#conditions = this.constructor.defaultConditions();
-      return this.#conditions;
     }
 
     return this.#conditions;
   }
 
   set conditions(conditions) {
-    if (conditions === null) {
+    if (typeof(this.#conditions) === 'undefined') {
       this.#conditions = this.constructor.defaultConditions();
       return;
     }
+    else
+    {
+      this.#conditions = [];
 
-    this.#conditions = [];
-
-    for (let item of conditions) {
-      if (item instanceof Array) {
-        this.constructor.addCondition(item[0], item[1]);
-        return;
+      for (let item of conditions)
+      {
+        if (item instanceof Array)
+        {
+          this.constructor.addCondition(item[0], item[1]);
+        }
+        else
+        {
+          this.constructor.addCondition(item);
+        }
       }
-
-      this.constructor.addCondition(item);
     }
   }
 
@@ -268,20 +277,23 @@ export class MADescription
     return [];
   }
 
-  addCondition(condition, label = null) {
-    this.conditions.push({ condition, label });
+  addCondition(condition, label=undefined) {
+    if (typeof(label) === 'undefined')
+    {
+      label = condition.label;
+    }
+    this.conditions.push([condition, label]);
   }
 
   get undefined() {
-    let result = null;
-
+    let result;
     if (typeof(this.#undefined) === 'undefined') {
       result = this.constructor.defaultUndefined();
     } else {
       result = this.#undefined;
     }
 
-    return result === null ? this.defaultUndefined() : result;
+    return (typeof(result) === 'undefined') ? this.defaultUndefined() : result;
   }
 
   set undefined(str) {
@@ -299,4 +311,45 @@ export class MADescription
   isSortable() {
     return false;
   }
+
+  acceptMagritte(aVisitor)
+  {
+    aVisitor.visitDescription(this);
+  }
+
+  validate(model)
+  {
+    visitor = this.validator;
+    errors = visitor.validateModelDescription(model, this);
+    return errors;
+  }
+
+  #validateRequired(model)
+  {
+    if (this.isRequired() && typeof(model) === 'undefined')
+    {
+      return [new MARequiredError(message=this.requiredErrorMessage, aDescription=this)];
+    }
+    else
+    {
+      return [];
+    }
+  }
+
+  get validator() {
+    if (typeof(this.#validator) === 'undefined') {
+      this.#validator = this.constructor.defaultValidator();
+    }
+    return this.#validator;
+  }
+
+  set validator(validator) {
+    this.#validator = validator;
+  }
+
+  static defaultValidator()
+  {
+    return MAValidatorVisitor;
+  }
+
 }

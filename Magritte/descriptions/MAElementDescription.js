@@ -1,7 +1,7 @@
 
 import { MADescription } from './MADescription.js';
-import { MAStringReaderVisitor } from './MAStringReaderVisitor.js'
-import { MAStringWriterVisitor } from './MAStringWriterVisitor.js'
+import { MAStringReaderVisitor } from '../visitors/MAStringReaderVisitor.js';
+import { MAStringWriterVisitor } from '../visitors/MAStringWriterVisitor.js';
 
 
 export class MAElementDescription extends MADescription

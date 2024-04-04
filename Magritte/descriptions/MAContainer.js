@@ -1,8 +1,8 @@
 
-import { MADescription } from 'MADescription.js';
+import { MADescription } from './MADescription.js';
 
 
-class MAContainer extends MADescription {
+export class MAContainer extends MADescription {
   static isAbstract() {
     return false;
   }

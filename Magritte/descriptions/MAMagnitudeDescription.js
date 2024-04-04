@@ -1,5 +1,9 @@
 
-class MAMagnitudeDescription extends MAElementDescription {
+import { MAElementDescription } from './MAElementDescription.js';
+
+
+export class MAMagnitudeDescription extends MAElementDescription
+{
   isSortable() {
     return true
   }
