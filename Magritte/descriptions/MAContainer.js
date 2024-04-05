@@ -2,46 +2,52 @@
 import { MADescription } from './MADescription.js';
 
 
-export class MAContainer extends MADescription {
+export class MAContainer extends MADescription
+{
   static isAbstract() {
     return false;
   }
 
-  constructor() {
+  #children = undefined;
+
+  constructor()
+  {
     super();
-    this._children = this.constructor.defaultCollection();
+    this.#children = this.constructor.defaultCollection();
   }
 
-  __copy__() {
-    const clone = new this.constructor();
+  clone()
+  {
+    const c = new this.constructor();
 
-    Object.assign(clone, this);
-    clone.setChildren(this.children.slice());
+    Object.assign(c, this);
+    c.setChildren(this.children.slice());
 
-    return clone;
+    return c;
   }
 
-  static defaultAccessor() {
-    return new MAIdentityAccessor();
+  get children()
+  {
+    return this.#children;
   }
 
-  get children() {
-    return this._children;
+  setChildren(aCollection)
+  {
+    this.#children = aCollection;
   }
 
-  setChildren(aCollection) {
-    this._children = aCollection;
-  }
-
-  isContainer() {
+  isContainer()
+  {
     return true;
   }
 
-  notEmpty() {
+  notEmpty()
+  {
     return this.children.length > 0;
   }
 
-  isEmpty() {
+  isEmpty()
+  {
     return this.children.length === 0;
   }
 
@@ -71,24 +77,29 @@ export class MAContainer extends MADescription {
     return result;
   }
 
-  static defaultCollection() {
+  static defaultCollection()
+  {
     return [];
   }
 
-  asContainer() {
+  asContainer()
+  {
     return this;
   }
 
-  allSatisty(aBlock) {
+  allSatisfy(aBlock)
+  {
     return this.children.every((item) => aBlock(item));
   }
 
-  anySatisty(aBlock) {
+  anySatisfy(aBlock)
+  {
     return this.children.some((item) => aBlock(item));
   }
 
-  collect(aBlock) {
-    const result = this.__copy__();
+  collect(aBlock)
+  {
+    const result = this.clone();
     const items = this.children.map((item) => aBlock(item));
 
     result.setChildren(items);
@@ -96,8 +107,9 @@ export class MAContainer extends MADescription {
     return result;
   }
 
-  select(aBlock) {
-    const result = this.__copy__();
+  select(aBlock)
+  {
+    const result = this.clone();
     const items = this.children.filter((item) => aBlock(item));
 
     result.setChildren(items);
@@ -105,8 +117,9 @@ export class MAContainer extends MADescription {
     return result;
   }
 
-  reject(aBlock) {
-    const result = this.__copy__();
+  reject(aBlock)
+  {
+    const result = this.clone();
     const items = this.children.filter((item) => !aBlock(item));
 
     result.setChildren(items);
@@ -114,16 +127,18 @@ export class MAContainer extends MADescription {
     return result;
   }
 
-  copyEmpty() {
-    const result = this.__copy__();
+  copyEmpty()
+  {
+    const result = this.clone();
 
     result.setChildren(this.constructor.defaultCollection());
 
     return result;
   }
 
-  copyRange(aStartIndex, anEndIndex) {
-    const result = this.__copy__();
+  copyRange(aStartIndex, anEndIndex)
+  {
+    const result = this.clone();
     const items = this.children.slice(aStartIndex, anEndIndex + 1);
 
     result.setChildren(items);
@@ -131,27 +146,38 @@ export class MAContainer extends MADescription {
     return result;
   }
 
-  copyWithout(anObject) {
+  copyWithout(anObject)
+  {
     return this.reject((item) => item === anObject);
   }
 
-  copyWithoutAll(aCollection) {
+  copyWithoutAll(aCollection)
+  {
     return this.reject((item) => aCollection.includes(item));
   }
 
-  detect(aBlock) {
+  detect(aBlock)
+  {
     return this.children.find((item) => aBlock(item));
   }
 
-  detectIfNone(aBlock, anExceptionBlock) {
+  detectIfNone(aBlock, anExceptionBlock)
+  {
     return this.children.find((item) => aBlock(item)) || anExceptionBlock();
   }
 
-  do(aBlock) {
+  do(aBlock)
+  {
     this.children.forEach((item) => aBlock(item));
   }
 
-  keysAndValuesDo(aBlock) {
+  keysAndValuesDo(aBlock)
+  {
     this.children.forEach((item, idx) => aBlock(idx, item));
+  }
+
+  acceptMagritte(aVisitor)
+  {
+    aVisitor.visitContainer(this);
   }
 }
