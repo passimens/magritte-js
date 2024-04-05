@@ -18,4 +18,9 @@ export class MAStringDescription extends MAElementDescription
   {
     return true;
   }
+
+  acceptMagritte(aVisitor)
+  {
+    aVisitor.visitStringDescription(this);
+  }
 }

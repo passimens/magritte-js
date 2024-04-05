@@ -2,7 +2,7 @@
 import { MANumberDescription } from './MANumberDescription.js';
 
 
-export class MAIntDescription extends MANumberDescription
+export class MAFloatDescription extends MANumberDescription
 {
   static isAbstract()
   {
@@ -16,6 +16,6 @@ export class MAIntDescription extends MANumberDescription
 
   acceptMagritte(aVisitor)
   {
-    aVisitor.visitIntDescription(this);
+    aVisitor.visitFloatDescription(this);
   }
 }

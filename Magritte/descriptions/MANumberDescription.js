@@ -6,6 +6,11 @@ export class MANumberDescription extends MAMagnitudeDescription
 {
   bePositive()
   {
-    this.addCondition('MACondition.model > 0', 'Positive number is required');
+    this.addCondition((val) => val > 0, 'Positive number is required');
+  }
+
+  acceptMagritte(aVisitor)
+  {
+    aVisitor.visitNumberDescription(this);
   }
 }

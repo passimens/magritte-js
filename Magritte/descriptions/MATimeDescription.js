@@ -2,7 +2,7 @@
 import { MAMagnitudeDescription } from './MAMagnitudeDescription.js';
 
 
-export class MADateAndTimeDescription extends MAMagnitudeDescription
+export class MATimeDescription extends MAMagnitudeDescription
 {
   static isAbstract()
   {
@@ -16,6 +16,6 @@ export class MADateAndTimeDescription extends MAMagnitudeDescription
 
   acceptMagritte(aVisitor)
   {
-    aVisitor.visitDateAndTimeDescription(this);
+    aVisitor.visitTimeDescription(this);
   }
 }

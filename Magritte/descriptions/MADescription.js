@@ -257,7 +257,8 @@ export class MADescription
     return this.#conditions;
   }
 
-  set conditions(conditions) {
+  set conditions(conditions)
+  {
     if (typeof(this.#conditions) === 'undefined') {
       this.#conditions = this.constructor.defaultConditions();
       return;
@@ -270,11 +271,11 @@ export class MADescription
       {
         if (item instanceof Array)
         {
-          this.constructor.addCondition(item[0], item[1]);
+          this.addCondition(item[0], item[1]);
         }
         else
         {
-          this.constructor.addCondition(item);
+          this.addCondition(item);
         }
       }
     }
@@ -284,7 +285,8 @@ export class MADescription
     return [];
   }
 
-  addCondition(condition, label=undefined) {
+  addCondition(condition, label=undefined)
+  {
     if (typeof(label) === 'undefined')
     {
       label = condition.label;
@@ -300,7 +302,7 @@ export class MADescription
       result = this.#undefined;
     }
 
-    return (typeof(result) === 'undefined') ? this.defaultUndefined() : result;
+    return (typeof(result) === 'undefined') ? this.constructor.defaultUndefined() : result;
   }
 
   set undefined(str) {
@@ -328,7 +330,7 @@ export class MADescription
   {
     if (typeof(this.#requiredErrorMessage) === 'undefined')
     {
-      return this.defaultRequiredErrorMessage();
+      return this.constructor.defaultRequiredErrorMessage();
     }
     return this.#requiredErrorMessage;
   }
@@ -347,7 +349,7 @@ export class MADescription
   {
     if (typeof(this.#kindErrorMessage) === 'undefined')
     {
-      return this.defaultKindErrorMessage();
+      return this.constructor.defaultKindErrorMessage();
     }
     return this.#kindErrorMessage;
   }
@@ -366,7 +368,7 @@ export class MADescription
   {
     if (typeof(this.#multipleErrorsMessage) === 'undefined')
     {
-      return this.defaultMultipleErrorsMessage();
+      return this.constructor.defaultMultipleErrorsMessage();
     }
     return this.#multipleErrorsMessage;
   }
@@ -385,7 +387,7 @@ export class MADescription
   {
     if (typeof(this.#conflictErrorMessage) === 'undefined')
     {
-      return this.defaultConflictErrorMessage();
+      return this.constructor.defaultConflictErrorMessage();
     }
     return this.#conflictErrorMessage;
   }
@@ -407,7 +409,7 @@ export class MADescription
     return errors;
   }
 
-  #validateRequired(model)
+  validateRequired(model)
   {
     if (this.isRequired() && typeof(model) === 'undefined')
     {
@@ -419,7 +421,7 @@ export class MADescription
     }
   }
 
-  #validateKind(model)
+  validateKind(model)
   {
     if (model instanceof this.kind)
     {
@@ -431,13 +433,13 @@ export class MADescription
     }
   }
 
-  #validateSpecific(model)
+  validateSpecific(model)
   {
     // validates descriptions-specific conditions. Subclasses may override this method - see MAMAgnitudeDescription for example.
     return [];
   }
 
-  #validateConditions(model)
+  validateConditions(model)
   {
     const errors = [];
     for (const conditionTuple of this.conditions)

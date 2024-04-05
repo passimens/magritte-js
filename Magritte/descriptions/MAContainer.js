@@ -117,7 +117,7 @@ export class MAContainer extends MADescription {
   copyEmpty() {
     const result = this.__copy__();
 
-    result.setChildren(this.defaultCollection());
+    result.setChildren(this.constructor.defaultCollection());
 
     return result;
   }
