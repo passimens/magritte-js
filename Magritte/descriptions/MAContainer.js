@@ -51,27 +51,32 @@ export class MAContainer extends MADescription
     return this.children.length === 0;
   }
 
-  hasChildren() {
+  hasChildren()
+  {
     return this.notEmpty()
   }
 
-  append(aDescription) {
+  append(aDescription)
+  {
     this.children.push(aDescription);
   }
 
-  extend(aCollection) {
+  extend(aCollection)
+  {
     this.children.push(...aCollection);
   }
 
-  static withDescription(aDescription) {
-    const result = new this();
+  static withDescription(aDescription)
+  {
+    const result = new this.constructor();
     result.append(aDescription);
 
     return result;
   }
 
-  static withAllDescriptions(aCollection) {
-    const result = new this();
+  static withAllDescriptions(aCollection)
+  {
+    const result = new this.constructor();
     result.extend(aCollection);
 
     return result;
