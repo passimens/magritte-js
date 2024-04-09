@@ -1,3 +1,3 @@
 #/bin/bash
 
-bash -c 'find "Magritte" -type f -name "*.js" -exec node {} \;'
+bash -c 'find "Magritte" -type f -name "*.js" -exec node --use_strict {} \;'
