@@ -1,7 +1,6 @@
 
 import { MAValidatorVisitor } from '../visitors/MAValidatorVisitor.js'
 import { MAConditionError } from '../errors/MAConditionError.js';
-import { MAKindError } from '../errors/MAKindError.js';
 import { MARequiredError } from '../errors/MARequiredError.js';
 
 
@@ -11,7 +10,6 @@ export class MADescription
     return true;
   }
 
-  _kind = undefined;
   _readOnly = undefined;
   _required = undefined;
   _undefinedValue = undefined;
@@ -25,7 +23,6 @@ export class MADescription
   _undefined = undefined;
   _validator = undefined;
   _requiredErrorMessage = undefined;
-  _kindErrorMessage = undefined;
   _multipleErrorsMessage = undefined;
   _conflictErrorMessage = undefined;
 
@@ -38,26 +35,6 @@ export class MADescription
 
   get type() {
     return this.constructor.name;
-  }
-
-  get kind() {
-    if (typeof(this._kind) === 'undefined') {
-      return this.constructor.defaultKind();
-    }
-
-    return this._kind;
-  }
-
-  set kind(aClass) {
-    this._kind = aClass;
-  }
-
-  static defaultKind() {
-    return Object;
-  }
-
-  isKindDefined() {
-    return typeof(this._kind) !== 'undefined';
   }
 
   get readOnly() {
@@ -345,25 +322,6 @@ export class MADescription
     return 'Input is required but no input given';
   }
 
-  get kindErrorMessage()
-  {
-    if (typeof(this._kindErrorMessage) === 'undefined')
-    {
-      return this.constructor.defaultKindErrorMessage();
-    }
-    return this._kindErrorMessage;
-  }
-
-  set kindErrorMessage(message)
-  {
-    this._kindErrorMessage = message;
-  }
-
-  static defaultKindErrorMessage()
-  {
-    return 'Invalid input given - wrong type';
-  }
-
   get multipleErrorsMessage()
   {
     if (typeof(this._multipleErrorsMessage) === 'undefined')
@@ -418,18 +376,6 @@ export class MADescription
     else
     {
       return [];
-    }
-  }
-
-  validateKind(model)
-  {
-    if (model instanceof this.kind)
-    {
-      return [];
-    }
-    else
-    {
-      return [new MAKindError(this, this.kindErrorMessage)];
     }
   }
 
@@ -491,13 +437,10 @@ export class MADescription
      'undefined',
      'children',
      'group',
-     'classes',
      'extensible',
      'lineCount',
      'undefinedValue',
      'validator',
-     'kindErrorMessage',
-     'kind',
      'comment',
      'trueString',
      'min',
@@ -534,10 +477,17 @@ export class MADescription
         {
           if (Array.isArray(value))
           {
-            console.log(`${indent_str}  ${propertyName}: Array:`);
-            for (const child of value)
+            if (value.length)
             {
-              child._dbg_print(indent + 4);
+              console.log(`${indent_str}  ${propertyName}: Array items below`);
+              for (const child of value)
+              {
+                child._dbg_print(indent + 4);
+              }
+            }
+            else
+            {
+              console.log(`${indent_str}  ${propertyName}: Empty array`);
             }
           }
           else

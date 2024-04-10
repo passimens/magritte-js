@@ -29,22 +29,4 @@ export class MAToManyRelationDescription extends MARelationDescription
       return [];
     }
   }
-
-  validateKind(model)
-  {
-    const errors = super.validateKind(model);
-    if (errors.length > 0)
-    {
-      return errors;
-    }
-    const classes = this.classes;
-    for (const item of model)
-    {
-      if (typeof(classes) !== 'undefined' && !classes.some((c) => item instanceof c))
-      {
-        return [new MAKindError(this, this.kindErrorMessage)];
-      }
-    }
-    return [];
-  }
 }

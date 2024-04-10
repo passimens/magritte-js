@@ -94,21 +94,4 @@ export class MAOptionDescription extends MAReferenceDescription
       this.reference.undefined = aStr;
     }
   }
-
-  validateOptionKind(model)
-  {
-    if (this.options.includes(model))
-    {
-      return [];
-    }
-    if (this.isExtensible())
-    {
-      return this.reference.validate(model);
-    }
-    else
-    {
-      return [new MAKindError(this, this.kindErrorMessage)];
-    }
-  }
-
 }

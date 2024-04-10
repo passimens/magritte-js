@@ -9,11 +9,6 @@ export class MATimeDescription extends MAMagnitudeDescription
     return false;
   }
 
-  static defaultKind()
-  {
-    return Date;
-  }
-
   acceptMagritte(aVisitor)
   {
     aVisitor.visitTimeDescription(this);

@@ -12,11 +12,6 @@ export class MABooleanDescription extends MAElementDescription
     return false;
   }
 
-  static defaultKind()
-  {
-    return Boolean;
-  }
-
   get trueString()
   {
       if (typeof(this._trueString) === 'undefined')

@@ -11,15 +11,4 @@ export class MASingleOptionDescription extends MAOptionDescription
   acceptMagritte(aVisitor) {
     aVisitor.visitSingleOptionDescription(this);
   }
-
-  validateKind(model)
-  {
-    let errors = super.validateKind(model);
-    if (errors.length > 0)
-    {
-      return errors;
-    }
-    errors = this.validateOptionKind(model);
-    return errors;
-  }
 }

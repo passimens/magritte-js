@@ -9,11 +9,6 @@ export class MAFloatDescription extends MANumberDescription
     return false;
   }
 
-  static defaultKind()
-  {
-    return Number;
-  }
-
   acceptMagritte(aVisitor)
   {
     aVisitor.visitFloatDescription(this);

@@ -9,11 +9,6 @@ export class MAStringDescription extends MAElementDescription
     return false;
   }
 
-  static defaultKind()
-  {
-    return String;
-  }
-
   isSortable()
   {
     return true;
