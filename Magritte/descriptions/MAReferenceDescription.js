@@ -5,17 +5,17 @@ import { MAStringDescription } from './MAStringDescription.js';
 
 export class MAReferenceDescription extends MAElementDescription
 {
-  #reference = undefined;
+  _reference = undefined;
 
   get reference() {
-    if (typeof(this.#reference) === 'undefined') {
+    if (typeof(this._reference) === 'undefined') {
       return this.constructor.defaultReference();
     }
-    return this.#reference;
+    return this._reference;
   }
 
   set reference(aDescription) {
-    this.#reference = aDescription;
+    this._reference = aDescription;
   }
 
   static defaultReference() {

@@ -5,17 +5,17 @@ import { MAPriorityContainer } from './MAPriorityContainer.js';
 
 export class MARelationDescription extends MAReferenceDescription
 {
-  #classes = undefined;
+  _classes = undefined;
 
   get classes() {
-    if (typeof(this.#classes) === 'undefined') {
-      this.#classes = this.constructor.defaultClasses();
+    if (typeof(this._classes) === 'undefined') {
+      this._classes = this.constructor.defaultClasses();
     }
-    return this.#classes;
+    return this._classes;
   }
 
   set classes(aCollection) {
-    this.#classes = aCollection;
+    this._classes = aCollection;
   }
 
   static defaultClasses() {
@@ -24,11 +24,11 @@ export class MARelationDescription extends MAReferenceDescription
 
   commonClass()
   {
-    if (typeof(this.#classes) === 'undefined') {
+    if (typeof(this._classes) === 'undefined') {
         return undefined;
     }
     let mostBaseClass = undefined;
-    for (const c of this.#classes)
+    for (const c of this._classes)
     {
       let currentClass = c;
       while (currentClass.__proto__)

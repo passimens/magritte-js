@@ -6,19 +6,19 @@ import { MAStringWriterVisitor } from '../visitors/MAStringWriterVisitor.js';
 
 export class MAElementDescription extends MADescription
 {
-  #default = undefined;
-  #stringReader = undefined;
-  #stringWriter = undefined;
+  _default = undefined;
+  _stringReader = undefined;
+  _stringWriter = undefined;
 
   get default() {
-    if (typeof(this.#default) === 'undefined') {
+    if (typeof(this._default) === 'undefined') {
       return this.constructor.defaultDefault();
     }
-    return this.#default;
+    return this._default;
   }
 
   set default(data) {
-    this.#default = data;
+    this._default = data;
   }
 
   static defaultDefault() {
@@ -26,14 +26,14 @@ export class MAElementDescription extends MADescription
   }
 
   get stringReader() {
-    if (typeof(this.#stringReader) === 'undefined') {
+    if (typeof(this._stringReader) === 'undefined') {
       return this.constructor.defaultStringReader();
     }
-    return this.#stringReader;
+    return this._stringReader;
   }
 
   set stringReader(data) {
-    this.#stringReader = data;
+    this._stringReader = data;
   }
 
   static defaultStringReader() {
@@ -41,14 +41,14 @@ export class MAElementDescription extends MADescription
   }
 
   get stringWriter() {
-    if (typeof(this.#stringWriter) === 'undefined') {
+    if (typeof(this._stringWriter) === 'undefined') {
       return this.constructor.defaultStringWriter();
     }
-    return this.#stringWriter;
+    return this._stringWriter;
   }
 
   set stringWriter(data) {
-    this.#stringWriter = data;
+    this._stringWriter = data;
   }
 
   static defaultStringWriter() {

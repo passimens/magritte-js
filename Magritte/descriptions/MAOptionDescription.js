@@ -4,19 +4,19 @@ import { MAReferenceDescription } from './MAReferenceDescription.js';
 
 export class MAOptionDescription extends MAReferenceDescription
 {
-  #options = undefined;
-  #extensible = undefined;
-  #sorted = undefined;
+  _options = undefined;
+  _extensible = undefined;
+  _sorted = undefined;
 
   get options() {
-    if (typeof(this.#options) === 'undefined') {
-      this.#options = this.constructor.defaultOptions();
+    if (typeof(this._options) === 'undefined') {
+      this._options = this.constructor.defaultOptions();
     }
-    return this.#options;
+    return this._options;
   }
 
   set options(anArray) {
-    this.#options = anArray;
+    this._options = anArray;
   }
 
   static defaultOptions() {
@@ -24,14 +24,14 @@ export class MAOptionDescription extends MAReferenceDescription
   }
 
   get extensible() {
-    if (typeof(this.#extensible) === 'undefined') {
+    if (typeof(this._extensible) === 'undefined') {
       return this.constructor.defaultExtensible();
     }
-    return this.#extensible;
+    return this._extensible;
   }
 
   set extensible(aBoolean) {
-    this.#extensible = aBoolean;
+    this._extensible = aBoolean;
   }
 
   static defaultExtensible() {
@@ -54,14 +54,14 @@ export class MAOptionDescription extends MAReferenceDescription
   }
 
   get sorted() {
-    if (typeof(this.#sorted) === 'undefined') {
+    if (typeof(this._sorted) === 'undefined') {
       return this.constructor.defaultSorted();
     }
-    return this.#sorted;
+    return this._sorted;
   }
 
   set sorted(aBoolean) {
-    this.#sorted = aBoolean;
+    this._sorted = aBoolean;
   }
 
   static defaultSorted() {

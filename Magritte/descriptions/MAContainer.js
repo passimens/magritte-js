@@ -8,32 +8,32 @@ export class MAContainer extends MADescription
     return false;
   }
 
-  #children = undefined;
+  _children = undefined;
 
   constructor(args)
   {
     super(args);
-    this.#children = this.constructor.defaultCollection();
+    this._children = this.constructor.defaultCollection();
   }
 
   clone()
   {
-    const c = new this.constructor();
+    const result = new this.constructor();
 
-    Object.assign(c, this);
-    c.setChildren(this.children.slice());
+    Object.assign(result, this);
+    result.setChildren(this.children.slice());
 
-    return c;
+    return result;
   }
 
   get children()
   {
-    return this.#children;
+    return this._children;
   }
 
   setChildren(aCollection)
   {
-    this.#children = aCollection;
+    this._children = aCollection;
   }
 
   isContainer()
