@@ -10,9 +10,9 @@ export class MAContainer extends MADescription
 
   #children = undefined;
 
-  constructor()
+  constructor(args)
   {
-    super();
+    super(args);
     this.#children = this.constructor.defaultCollection();
   }
 

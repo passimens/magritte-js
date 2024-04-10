@@ -30,8 +30,8 @@ export class MADescription
   #conflictErrorMessage = undefined;
 
 
-  constructor(args = {}) {
-    for (const [key, value] of Object.entries(args)) {
+  constructor(args) {
+    if (args) for (const [key, value] of Object.entries(args)) {
       this[key] = value;
     }
   }
