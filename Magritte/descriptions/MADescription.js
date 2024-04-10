@@ -484,4 +484,72 @@ export class MADescription
   {
     return MAValidatorVisitor;
   }
+
+  _dbg_print(indent)
+  {
+    const hardcodedPropertyNames = [
+     'undefined',
+     'children',
+     'group',
+     'classes',
+     'extensible',
+     'lineCount',
+     'undefinedValue',
+     'validator',
+     'kindErrorMessage',
+     'kind',
+     'comment',
+     'trueString',
+     'min',
+     'required',
+     'stringWriter',
+     'readOnly',
+     'name',
+     'conditions',
+     'label',
+     'multipleErrorsMessage',
+     'conflictErrorMessage',
+     'options',
+     'requiredErrorMessage',
+     'max',
+     'visible',
+     'stringReader',
+     'rangeErrorMessage',
+     'falseString',
+     'priority',
+     'sorted',
+     'reference',
+     'default',
+    ];
+
+    if (typeof(indent) === 'undefined') indent = 0;
+    const indent_str = ''.padStart(indent, ' ');
+    console.log(`${indent_str}==== ${this.constructor.name} (${this.name}) ====`);
+    for (const propertyName of hardcodedPropertyNames)
+    {
+      try
+      {
+        const value = this[propertyName];
+        if (typeof(value) !== 'undefined')
+        {
+          if (Array.isArray(value))
+          {
+            console.log(`${indent_str}  ${propertyName}: Array:`);
+            for (const child of value)
+            {
+              child._dbg_print(indent + 4);
+            }
+          }
+          else
+          {
+            console.log(`${indent_str}  ${propertyName}: ${value}`);
+          }
+        }
+      }
+      catch (e)
+      {
+      }
+    }
+    console.log(`${indent_str}==== /${this.constructor.name} (${this.name}) ====`);
+  }
 }
