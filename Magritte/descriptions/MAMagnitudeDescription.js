@@ -15,9 +15,11 @@ export class MAMagnitudeDescription extends MAElementDescription
 
   isWithinRange(val)
   {
+    const minVal = this.#min;
+    const maxVal = this.#max;
     return
-        (this.#min === undefined || this.#min <= val) &&
-        (this.#max === undefined || this.#max >= val);
+        (minVal === undefined || minVal <= val) &&
+        (maxVal === undefined || maxVal >= val);
   }
 
   get max()
