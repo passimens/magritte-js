@@ -4,10 +4,9 @@ import { MADescription } from './MADescription.js';
 
 export class MAContainer extends MADescription
 {
-  constructor(args)
+  constructor(init_props)
   {
-    super(args);
-    this.initWithArgs(args);
+    super(init_props);
     this.#children = this.constructor.defaultCollection();
   }
 
@@ -15,7 +14,7 @@ export class MAContainer extends MADescription
     return false;
   }
 
-  #children = undefined;
+  #children = this.getInitialPropertyValue('children');
 
   clone()
   {

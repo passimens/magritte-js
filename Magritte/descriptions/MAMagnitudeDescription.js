@@ -5,18 +5,13 @@ import { MARangeError } from '../errors/MARangeError.js';
 
 export class MAMagnitudeDescription extends MAElementDescription
 {
-  constructor(args) {
-    super(args);
-    this.initWithArgs(args);
-  }
-
   isSortable() {
     return true
   }
 
-  #min = undefined;
-  #max = undefined;
-  #rangeErrorMessage = undefined;
+  #min = this.getInitialPropertyValue('min');
+  #max = this.getInitialPropertyValue('max');
+  #rangeErrorMessage = this.getInitialPropertyValue('rangeErrorMessage');
 
   isWithinRange(val)
   {

@@ -4,12 +4,7 @@ import { MAStringDescription } from './MAStringDescription.js';
 
 export class MAMemoDescription extends MAStringDescription
 {
-  constructor(args) {
-    super(args);
-    this.initWithArgs(args);
-  }
-
-  #lineCount = undefined;
+  #lineCount = this.getInitialPropertyValue('lineCount');
 
   get lineCount()
   {

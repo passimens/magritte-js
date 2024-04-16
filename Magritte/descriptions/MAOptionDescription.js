@@ -4,14 +4,9 @@ import { MAReferenceDescription } from './MAReferenceDescription.js';
 
 export class MAOptionDescription extends MAReferenceDescription
 {
-  constructor(args) {
-    super(args);
-    this.initWithArgs(args);
-  }
-
-  #options = undefined;
-  #extensible = undefined;
-  #sorted = undefined;
+  #options = this.getInitialPropertyValue('options');
+  #extensible = this.getInitialPropertyValue('extensible');
+  #sorted = this.getInitialPropertyValue('sorted');
 
   get options() {
     if (this.#options === undefined) {

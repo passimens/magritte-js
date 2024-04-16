@@ -6,51 +6,46 @@ import { MARequiredError } from '../errors/MARequiredError.js';
 
 export class MADescription
 {
-  constructor(args) {
-    this.initWithArgs(args);
+  constructor(init_props) {
+    this.#init_props = init_props;
   }
 
   static isAbstract() {
     return true;
   }
 
-  #readOnly = undefined;
-  #required = undefined;
-  #undefinedValue = undefined;
-  #name = undefined;
-  #comment = undefined;
-  #group = undefined;
-  #label = undefined;
-  #priority = undefined;
-  #visible = undefined;
-  #conditions = undefined;
-  #undefined = undefined;
-  #validator = undefined;
-  #requiredErrorMessage = undefined;
-  #multipleErrorsMessage = undefined;
-  #conflictErrorMessage = undefined;
+  #readOnly = this.getInitialPropertyValue('readOnly');
+  #required = this.getInitialPropertyValue('required');
+  #undefinedValue = this.getInitialPropertyValue('undefinedValue');
+  #name = this.getInitialPropertyValue('name');
+  #comment = this.getInitialPropertyValue('comment');
+  #group = this.getInitialPropertyValue('group');
+  #label = this.getInitialPropertyValue('label');
+  #priority = this.getInitialPropertyValue('priority');
+  #visible = this.getInitialPropertyValue('visible');
+  #conditions = this.getInitialPropertyValue('conditions');
+  #undefined = this.getInitialPropertyValue('undefined');
+  #validator = this.getInitialPropertyValue('validator');
+  #requiredErrorMessage = this.getInitialPropertyValue('requiredErrorMessage');
+  #multipleErrorsMessage = this.getInitialPropertyValue('multipleErrorsMessage');
+  #conflictErrorMessage = this.getInitialPropertyValue('conflictErrorMessage');
 
-  initWithArgs(args)
+  #init_props = undefined;
+  getInitialPropertyValue(name)
   {
     /*
-      Из-за реализации механизма наследования в JS, мы не можем установить приватные поля объекта-наследника в процессе
-      выполнения конструктора-родителя. Таким образом, написать общий код инициализации полей в конструкторе базового
-      класса невозможно - возникает исключение TypeError при попытке записи свойства наследника. Обходным путём
-      явлется вызов метода initWithArgs в конструкторе каждого класса-наследника, в котором имеются новые свойства.
+      Обращение к приватному полю (#field) в JS возможно только в контексте того класса, где оно объявлено.
+      Кроме того, сеттеры и геттеры дочерних классов не работают в процессе выполнения конструктора базового объекта.
+      Поэтому вместо инициализации полей в конструкторе базового MADescription запоминается объект init_props,
+      из которого каждый дочерний класс берёт начальные значения своих приватных полей с помощью данного метода.
     */
-    if (args) for (const [key, value] of Object.entries(args))
+    try
     {
-      try
-      {
-        this[key] = value;
-      }
-      catch (e)
-      {
-        if (!(e instanceof TypeError))
-        {
-          throw e;
-        }
-      }
+      return this.#init_props[name];
+    }
+    catch (e)
+    {
+        return undefined;
     }
   }
 
