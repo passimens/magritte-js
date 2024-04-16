@@ -9,7 +9,7 @@ export class MAOptionDescription extends MAReferenceDescription
   #sorted = undefined;
 
   get options() {
-    if (typeof(this.#options) === 'undefined') {
+    if (this.#options === undefined) {
       this.#options = this.constructor.defaultOptions();
     }
     return this.#options;
@@ -24,7 +24,7 @@ export class MAOptionDescription extends MAReferenceDescription
   }
 
   get extensible() {
-    if (typeof(this.#extensible) === 'undefined') {
+    if (this.#extensible === undefined) {
       return this.constructor.defaultExtensible();
     }
     return this.#extensible;
@@ -54,7 +54,7 @@ export class MAOptionDescription extends MAReferenceDescription
   }
 
   get sorted() {
-    if (typeof(this.#sorted) === 'undefined') {
+    if (this.#sorted === undefined) {
       return this.constructor.defaultSorted();
     }
     return this.#sorted;
@@ -89,7 +89,7 @@ export class MAOptionDescription extends MAReferenceDescription
 
   set undefined(str) {
     super.undefined = str;
-    if (typeof(this.reference) !== 'undefined')
+    if (this.reference !== undefined)
     {
       this.reference.undefined = aStr;
     }

@@ -8,7 +8,7 @@ export class MAMemoDescription extends MAStringDescription
 
   get lineCount()
   {
-    if (typeof(this.#lineCount) === 'undefined')
+    if (this.#lineCount === undefined)
     {
       return this.constructor.defaultLineCount();
     }

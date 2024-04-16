@@ -38,7 +38,7 @@ export class MADescription
   }
 
   get readOnly() {
-    if (typeof(this.#readOnly) === 'undefined') {
+    if (this.#readOnly === undefined) {
       return this.constructor.defaultReadOnly();
     }
     return this.#readOnly;
@@ -65,7 +65,7 @@ export class MADescription
   }
 
   get required() {
-    if (typeof(this.#required) === 'undefined') {
+    if (this.#required === undefined) {
       return this.constructor.defaultRequired();
     }
     return this.#required;
@@ -93,13 +93,13 @@ export class MADescription
 
   get undefinedValue() {
     let result;
-    if (typeof(this.#undefinedValue) === 'undefined') {
+    if (this.#undefinedValue === undefined) {
       result = this.constructor.defaultUndefinedValue();
     } else {
       result = this.#undefinedValue;
     }
 
-    return (typeof(result) === 'undefined') ? this.constructor.defaultUndefinedValue() : result;
+    return (result === undefined) ? this.constructor.defaultUndefinedValue() : result;
   }
 
   set undefinedValue(anObject) {
@@ -111,7 +111,7 @@ export class MADescription
   }
 
   get name() {
-    if (typeof(this.#name) === 'undefined') {
+    if (this.#name === undefined) {
       return this.constructor.defaultName();
     }
 
@@ -127,7 +127,7 @@ export class MADescription
   }
 
   get comment() {
-    if (typeof(this.#comment) === 'undefined') {
+    if (this.#comment === undefined) {
       return this.constructor.defaultComment();
     }
 
@@ -147,7 +147,7 @@ export class MADescription
   }
 
   get group() {
-    if (typeof(this.#group) === 'undefined') {
+    if (this.#group === undefined) {
       return this.constructor.defaultGroup();
     }
 
@@ -163,7 +163,7 @@ export class MADescription
   }
 
   get label() {
-    if (typeof(this.#label) === 'undefined') {
+    if (this.#label === undefined) {
       return this.constructor.defaultLabel();
     }
 
@@ -183,7 +183,7 @@ export class MADescription
   }
 
   get priority() {
-    if (typeof(this.#priority) === 'undefined') {
+    if (this.#priority === undefined) {
       return this.constructor.defaultPriority();
     }
 
@@ -199,7 +199,7 @@ export class MADescription
   }
 
   get visible() {
-    if (typeof(this.#visible) === 'undefined') {
+    if (this.#visible === undefined) {
       return this.constructor.defaultVisible();
     }
 
@@ -227,7 +227,7 @@ export class MADescription
   }
 
   get conditions() {
-    if (typeof(this.#conditions) === 'undefined') {
+    if (this.#conditions === undefined) {
       this.#conditions = this.constructor.defaultConditions();
     }
 
@@ -236,7 +236,7 @@ export class MADescription
 
   set conditions(conditions)
   {
-    if (typeof(this.#conditions) === 'undefined') {
+    if (this.#conditions === undefined) {
       this.#conditions = this.constructor.defaultConditions();
       return;
     }
@@ -264,7 +264,7 @@ export class MADescription
 
   addCondition(condition, label=undefined)
   {
-    if (typeof(label) === 'undefined')
+    if (label === undefined)
     {
       label = condition.label;
     }
@@ -273,13 +273,13 @@ export class MADescription
 
   get undefined() {
     let result;
-    if (typeof(this.#undefined) === 'undefined') {
+    if (this.#undefined === undefined) {
       result = this.constructor.defaultUndefined();
     } else {
       result = this.#undefined;
     }
 
-    return (typeof(result) === 'undefined') ? this.constructor.defaultUndefined() : result;
+    return (result === undefined) ? this.constructor.defaultUndefined() : result;
   }
 
   set undefined(str) {
@@ -305,7 +305,7 @@ export class MADescription
 
   get requiredErrorMessage()
   {
-    if (typeof(this.#requiredErrorMessage) === 'undefined')
+    if (this.#requiredErrorMessage === undefined)
     {
       return this.constructor.defaultRequiredErrorMessage();
     }
@@ -324,7 +324,7 @@ export class MADescription
 
   get multipleErrorsMessage()
   {
-    if (typeof(this.#multipleErrorsMessage) === 'undefined')
+    if (this.#multipleErrorsMessage === undefined)
     {
       return this.constructor.defaultMultipleErrorsMessage();
     }
@@ -343,7 +343,7 @@ export class MADescription
 
   get conflictErrorMessage()
   {
-    if (typeof(this.#conflictErrorMessage) === 'undefined')
+    if (this.#conflictErrorMessage === undefined)
     {
       return this.constructor.defaultConflictErrorMessage();
     }
@@ -369,7 +369,7 @@ export class MADescription
 
   validateRequired(model)
   {
-    if (this.isRequired() && typeof(model) === 'undefined')
+    if (this.isRequired() && model === undefined)
     {
       return [new MARequiredError(this, this.requiredErrorMessage)];
     }
@@ -416,7 +416,7 @@ export class MADescription
   }
 
   get validator() {
-    if (typeof(this.#validator) === 'undefined') {
+    if (this.#validator === undefined) {
       this.#validator = this.constructor.defaultValidator();
     }
     return this.#validator;
@@ -431,7 +431,7 @@ export class MADescription
     return MAValidatorVisitor;
   }
 
-  #dbg_print(indent)
+  _dbg_print(indent)
   {
     const hardcodedPropertyNames = [
      'undefined',
@@ -465,7 +465,7 @@ export class MADescription
      'default',
     ];
 
-    if (typeof(indent) === 'undefined') indent = 0;
+    if (indent === undefined) indent = 0;
     const indent_str = ''.padStart(indent, ' ');
     console.log(`${indent_str}==== ${this.constructor.name} (${this.name}) ====`);
     for (const propertyName of hardcodedPropertyNames)
@@ -473,7 +473,7 @@ export class MADescription
       try
       {
         const value = this[propertyName];
-        if (typeof(value) !== 'undefined')
+        if (value !== undefined)
         {
           if (Array.isArray(value))
           {
@@ -482,7 +482,7 @@ export class MADescription
               console.log(`${indent_str}  ${propertyName}: Array items below`);
               for (const child of value)
               {
-                child.#dbg_print(indent + 4);
+                child._dbg_print(indent + 4);
               }
             }
             else

@@ -7,7 +7,7 @@ export class MARelationDescription extends MAReferenceDescription
 {
   get reference() {
     let result = super.reference;
-    if (typeof(result) === 'undefined')
+    if (result === undefined)
     {
       descriptionContainer = this.defaultReference();
       descriptionContainer.label = this.label;

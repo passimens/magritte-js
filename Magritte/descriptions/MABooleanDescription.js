@@ -14,7 +14,7 @@ export class MABooleanDescription extends MAElementDescription
 
   get trueString()
   {
-      if (typeof(this.#trueString) === 'undefined')
+      if (this.#trueString === undefined)
       {
           return this.constructor.defaultTrueString();
       }
@@ -38,7 +38,7 @@ export class MABooleanDescription extends MAElementDescription
 
   get falseString()
   {
-      if (typeof(this.#falseString) === 'undefined')
+      if (this.#falseString === undefined)
       {
           return this.constructor.defaultFalseString();
       }

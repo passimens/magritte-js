@@ -8,7 +8,7 @@ export class MAReferenceDescription extends MAElementDescription
   #reference = undefined;
 
   get reference() {
-    if (typeof(this.#reference) === 'undefined') {
+    if (this.#reference === undefined) {
       return this.constructor.defaultReference();
     }
     return this.#reference;

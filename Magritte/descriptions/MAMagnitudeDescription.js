@@ -16,13 +16,13 @@ export class MAMagnitudeDescription extends MAElementDescription
   isWithinRange(val)
   {
     return
-        (typeof(this.#min) === 'undefined' || this.#min <= val) &&
-        (typeof(this.#max) === 'undefined' || this.#max >= val);
+        (this.#min === undefined || this.#min <= val) &&
+        (this.#max === undefined || this.#max >= val);
   }
 
   get max()
   {
-    if (typeof(this.#max) === 'undefined')
+    if (this.#max === undefined)
     {
       return this.constructor.defaultMax();
     }
@@ -41,7 +41,7 @@ export class MAMagnitudeDescription extends MAElementDescription
 
   get min()
   {
-    if (typeof(this.#min) === 'undefined')
+    if (this.#min === undefined)
     {
       return this.constructor.defaultMin();
     }
@@ -66,7 +66,7 @@ export class MAMagnitudeDescription extends MAElementDescription
 
   get rangeErrorMessage()
   {
-    if (typeof(this.#rangeErrorMessage) !== 'undefined')
+    if (this.#rangeErrorMessage !== undefined)
     {
       return this.#rangeErrorMessage;
     }
@@ -74,9 +74,9 @@ export class MAMagnitudeDescription extends MAElementDescription
     const minVal = this.#min;
     const maxVal = this.#max;
 
-    if (typeof(minVal) !== 'undefined')
+    if (minVal !== undefined)
     {
-      if (typeof(maxVal) !== 'undefined')
+      if (maxVal !== undefined)
       {
         return `Input must be between ${minVal} and ${maxVal}`;
       }
@@ -84,7 +84,7 @@ export class MAMagnitudeDescription extends MAElementDescription
     }
     else
     {
-      if (typeof(maxVal) !== 'undefined')
+      if (maxVal !== undefined)
       {
         return `Input must be below or equal to ${maxVal}`;
       }

@@ -11,7 +11,7 @@ export class MAElementDescription extends MADescription
   #stringWriter = undefined;
 
   get default() {
-    if (typeof(this.#default) === 'undefined') {
+    if (this.#default === undefined) {
       return this.constructor.defaultDefault();
     }
     return this.#default;
@@ -26,7 +26,7 @@ export class MAElementDescription extends MADescription
   }
 
   get stringReader() {
-    if (typeof(this.#stringReader) === 'undefined') {
+    if (this.#stringReader === undefined) {
       return this.constructor.defaultStringReader();
     }
     return this.#stringReader;
@@ -41,7 +41,7 @@ export class MAElementDescription extends MADescription
   }
 
   get stringWriter() {
-    if (typeof(this.#stringWriter) === 'undefined') {
+    if (this.#stringWriter === undefined) {
       return this.constructor.defaultStringWriter();
     }
     return this.#stringWriter;
