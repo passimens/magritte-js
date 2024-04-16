@@ -10,21 +10,21 @@ export class MADescription
     return true;
   }
 
-  _readOnly = undefined;
-  _required = undefined;
-  _undefinedValue = undefined;
-  _name = undefined;
-  _comment = undefined;
-  _group = undefined;
-  _label = undefined;
-  _priority = undefined;
-  _visible = undefined;
-  _conditions = undefined;
-  _undefined = undefined;
-  _validator = undefined;
-  _requiredErrorMessage = undefined;
-  _multipleErrorsMessage = undefined;
-  _conflictErrorMessage = undefined;
+  #readOnly = undefined;
+  #required = undefined;
+  #undefinedValue = undefined;
+  #name = undefined;
+  #comment = undefined;
+  #group = undefined;
+  #label = undefined;
+  #priority = undefined;
+  #visible = undefined;
+  #conditions = undefined;
+  #undefined = undefined;
+  #validator = undefined;
+  #requiredErrorMessage = undefined;
+  #multipleErrorsMessage = undefined;
+  #conflictErrorMessage = undefined;
 
 
   constructor(args) {
@@ -38,14 +38,14 @@ export class MADescription
   }
 
   get readOnly() {
-    if (typeof(this._readOnly) === 'undefined') {
+    if (typeof(this.#readOnly) === 'undefined') {
       return this.constructor.defaultReadOnly();
     }
-    return this._readOnly;
+    return this.#readOnly;
   }
 
   set readOnly(val) {
-    this._readOnly = val;
+    this.#readOnly = val;
   }
 
   static defaultReadOnly() {
@@ -65,14 +65,14 @@ export class MADescription
   }
 
   get required() {
-    if (typeof(this._required) === 'undefined') {
+    if (typeof(this.#required) === 'undefined') {
       return this.constructor.defaultRequired();
     }
-    return this._required;
+    return this.#required;
   }
 
   set required(aBool) {
-    this._required = aBool;
+    this.#required = aBool;
   }
 
   static defaultRequired() {
@@ -93,17 +93,17 @@ export class MADescription
 
   get undefinedValue() {
     let result;
-    if (typeof(this._undefinedValue) === 'undefined') {
+    if (typeof(this.#undefinedValue) === 'undefined') {
       result = this.constructor.defaultUndefinedValue();
     } else {
-      result = this._undefinedValue;
+      result = this.#undefinedValue;
     }
 
     return (typeof(result) === 'undefined') ? this.constructor.defaultUndefinedValue() : result;
   }
 
   set undefinedValue(anObject) {
-    this._undefinedValue = anObject;
+    this.#undefinedValue = anObject;
   }
 
   static defaultUndefinedValue() {
@@ -111,15 +111,15 @@ export class MADescription
   }
 
   get name() {
-    if (typeof(this._name) === 'undefined') {
+    if (typeof(this.#name) === 'undefined') {
       return this.constructor.defaultName();
     }
 
-    return this._name;
+    return this.#name;
   }
 
   set name(val) {
-    this._name = val;
+    this.#name = val;
   }
 
   static defaultName() {
@@ -127,15 +127,15 @@ export class MADescription
   }
 
   get comment() {
-    if (typeof(this._comment) === 'undefined') {
+    if (typeof(this.#comment) === 'undefined') {
       return this.constructor.defaultComment();
     }
 
-    return this._comment;
+    return this.#comment;
   }
 
   set comment(str) {
-    this._comment = str;
+    this.#comment = str;
   }
 
   static defaultComment() {
@@ -147,15 +147,15 @@ export class MADescription
   }
 
   get group() {
-    if (typeof(this._group) === 'undefined') {
+    if (typeof(this.#group) === 'undefined') {
       return this.constructor.defaultGroup();
     }
 
-    return this._group;
+    return this.#group;
   }
 
   set group(str) {
-    this._group = str;
+    this.#group = str;
   }
 
   static defaultGroup() {
@@ -163,15 +163,15 @@ export class MADescription
   }
 
   get label() {
-    if (typeof(this._label) === 'undefined') {
+    if (typeof(this.#label) === 'undefined') {
       return this.constructor.defaultLabel();
     }
 
-    return this._label;
+    return this.#label;
   }
 
   set label(str) {
-    this._label = str;
+    this.#label = str;
   }
 
   static defaultLabel() {
@@ -183,15 +183,15 @@ export class MADescription
   }
 
   get priority() {
-    if (typeof(this._priority) === 'undefined') {
+    if (typeof(this.#priority) === 'undefined') {
       return this.constructor.defaultPriority();
     }
 
-    return this._priority;
+    return this.#priority;
   }
 
   set priority(val) {
-    this._priority = val;
+    this.#priority = val;
   }
 
   static defaultPriority() {
@@ -199,15 +199,15 @@ export class MADescription
   }
 
   get visible() {
-    if (typeof(this._visible) === 'undefined') {
+    if (typeof(this.#visible) === 'undefined') {
       return this.constructor.defaultVisible();
     }
 
-    return this._visible;
+    return this.#visible;
   }
 
   set visible(val) {
-    this._visible = val;
+    this.#visible = val;
   }
 
   static defaultVisible() {
@@ -227,22 +227,22 @@ export class MADescription
   }
 
   get conditions() {
-    if (typeof(this._conditions) === 'undefined') {
-      this._conditions = this.constructor.defaultConditions();
+    if (typeof(this.#conditions) === 'undefined') {
+      this.#conditions = this.constructor.defaultConditions();
     }
 
-    return this._conditions;
+    return this.#conditions;
   }
 
   set conditions(conditions)
   {
-    if (typeof(this._conditions) === 'undefined') {
-      this._conditions = this.constructor.defaultConditions();
+    if (typeof(this.#conditions) === 'undefined') {
+      this.#conditions = this.constructor.defaultConditions();
       return;
     }
     else
     {
-      this._conditions = [];
+      this.#conditions = [];
 
       for (const item of conditions)
       {
@@ -273,17 +273,17 @@ export class MADescription
 
   get undefined() {
     let result;
-    if (typeof(this._undefined) === 'undefined') {
+    if (typeof(this.#undefined) === 'undefined') {
       result = this.constructor.defaultUndefined();
     } else {
-      result = this._undefined;
+      result = this.#undefined;
     }
 
     return (typeof(result) === 'undefined') ? this.constructor.defaultUndefined() : result;
   }
 
   set undefined(str) {
-    this._undefined = str;
+    this.#undefined = str;
   }
 
   static defaultUndefined() {
@@ -305,16 +305,16 @@ export class MADescription
 
   get requiredErrorMessage()
   {
-    if (typeof(this._requiredErrorMessage) === 'undefined')
+    if (typeof(this.#requiredErrorMessage) === 'undefined')
     {
       return this.constructor.defaultRequiredErrorMessage();
     }
-    return this._requiredErrorMessage;
+    return this.#requiredErrorMessage;
   }
 
   set requiredErrorMessage(message)
   {
-    this._requiredErrorMessage = message;
+    this.#requiredErrorMessage = message;
   }
 
   static defaultRequiredErrorMessage(cls)
@@ -324,16 +324,16 @@ export class MADescription
 
   get multipleErrorsMessage()
   {
-    if (typeof(this._multipleErrorsMessage) === 'undefined')
+    if (typeof(this.#multipleErrorsMessage) === 'undefined')
     {
       return this.constructor.defaultMultipleErrorsMessage();
     }
-    return this._multipleErrorsMessage;
+    return this.#multipleErrorsMessage;
   }
 
   set multipleErrorsMessage(message)
   {
-    this._multipleErrorsMessage = message;
+    this.#multipleErrorsMessage = message;
   }
 
   static defaultMultipleErrorsMessage()
@@ -343,16 +343,16 @@ export class MADescription
 
   get conflictErrorMessage()
   {
-    if (typeof(this._conflictErrorMessage) === 'undefined')
+    if (typeof(this.#conflictErrorMessage) === 'undefined')
     {
       return this.constructor.defaultConflictErrorMessage();
     }
-    return this._conflictErrorMessage;
+    return this.#conflictErrorMessage;
   }
 
   set conflictErrorMessage(message)
   {
-    this._conflictErrorMessage = message;
+    this.#conflictErrorMessage = message;
   }
 
   static defaultConflictErrorMessage()
@@ -416,14 +416,14 @@ export class MADescription
   }
 
   get validator() {
-    if (typeof(this._validator) === 'undefined') {
-      this._validator = this.constructor.defaultValidator();
+    if (typeof(this.#validator) === 'undefined') {
+      this.#validator = this.constructor.defaultValidator();
     }
-    return this._validator;
+    return this.#validator;
   }
 
   set validator(validator) {
-    this._validator = validator;
+    this.#validator = validator;
   }
 
   static defaultValidator()
@@ -431,7 +431,7 @@ export class MADescription
     return MAValidatorVisitor;
   }
 
-  _dbg_print(indent)
+  #dbg_print(indent)
   {
     const hardcodedPropertyNames = [
      'undefined',
@@ -482,7 +482,7 @@ export class MADescription
               console.log(`${indent_str}  ${propertyName}: Array items below`);
               for (const child of value)
               {
-                child._dbg_print(indent + 4);
+                child.#dbg_print(indent + 4);
               }
             }
             else

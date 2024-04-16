@@ -8,12 +8,12 @@ export class MAContainer extends MADescription
     return false;
   }
 
-  _children = undefined;
+  #children = undefined;
 
   constructor(args)
   {
     super(args);
-    this._children = this.constructor.defaultCollection();
+    this.#children = this.constructor.defaultCollection();
   }
 
   clone()
@@ -28,12 +28,12 @@ export class MAContainer extends MADescription
 
   get children()
   {
-    return this._children;
+    return this.#children;
   }
 
   setChildren(aCollection)
   {
-    this._children = aCollection;
+    this.#children = aCollection;
   }
 
   isContainer()

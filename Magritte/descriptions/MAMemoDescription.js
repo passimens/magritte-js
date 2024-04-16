@@ -4,20 +4,20 @@ import { MAStringDescription } from './MAStringDescription.js';
 
 export class MAMemoDescription extends MAStringDescription
 {
-  _lineCount = undefined;
+  #lineCount = undefined;
 
   get lineCount()
   {
-    if (typeof(this._lineCount) === 'undefined')
+    if (typeof(this.#lineCount) === 'undefined')
     {
       return this.constructor.defaultLineCount();
     }
-    return this._lineCount;
+    return this.#lineCount;
   }
 
   set lineCount(val)
   {
-    this._lineCount = val;
+    this.#lineCount = val;
   }
 
   static defaultLineCount()

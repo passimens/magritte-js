@@ -4,8 +4,8 @@ import { MAElementDescription } from './MAElementDescription.js';
 
 export class MABooleanDescription extends MAElementDescription
 {
-  _trueString = undefined;
-  _falseString = undefined;
+  #trueString = undefined;
+  #falseString = undefined;
 
   static isAbstract()
   {
@@ -14,16 +14,16 @@ export class MABooleanDescription extends MAElementDescription
 
   get trueString()
   {
-      if (typeof(this._trueString) === 'undefined')
+      if (typeof(this.#trueString) === 'undefined')
       {
           return this.constructor.defaultTrueString();
       }
-      return this._trueString
+      return this.#trueString
   }
 
   set trueString(trueString)
   {
-      this._trueString = trueString;
+      this.#trueString = trueString;
   }
 
   static defaultTrueString()
@@ -38,16 +38,16 @@ export class MABooleanDescription extends MAElementDescription
 
   get falseString()
   {
-      if (typeof(this._falseString) === 'undefined')
+      if (typeof(this.#falseString) === 'undefined')
       {
           return this.constructor.defaultFalseString();
       }
-      return this._falseString
+      return this.#falseString
   }
 
   set falseString(falseString)
   {
-      this._falseString = falseString;
+      this.#falseString = falseString;
   }
 
   static defaultFalseString()

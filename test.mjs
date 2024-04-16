@@ -39,9 +39,9 @@ function viewGenerator(object, description) {
     }
   }
 
-  function printRow(child, objectName)
+  function printRow(child, value)
   {
-    console.log(objectName, child.label, child.comment);
+    console.log(`value=${value}, \t label=${child.label}, \t comment=${child.comment}`);
   }
 
   function printRow_html(child, objectName) {

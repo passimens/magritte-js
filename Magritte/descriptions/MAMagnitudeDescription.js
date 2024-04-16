@@ -9,29 +9,29 @@ export class MAMagnitudeDescription extends MAElementDescription
     return true
   }
 
-  _min = undefined;
-  _max = undefined;
-  _rangeErrorMessage = undefined;
+  #min = undefined;
+  #max = undefined;
+  #rangeErrorMessage = undefined;
 
   isWithinRange(val)
   {
     return
-        (typeof(this._min) === 'undefined' || this._min <= val) &&
-        (typeof(this._max) === 'undefined' || this._max >= val);
+        (typeof(this.#min) === 'undefined' || this.#min <= val) &&
+        (typeof(this.#max) === 'undefined' || this.#max >= val);
   }
 
   get max()
   {
-    if (typeof(this._max) === 'undefined')
+    if (typeof(this.#max) === 'undefined')
     {
       return this.constructor.defaultMax();
     }
-    return this._max;
+    return this.#max;
   }
 
   set max(val)
   {
-    this._max = val;
+    this.#max = val;
   }
 
   static defaultMax()
@@ -41,16 +41,16 @@ export class MAMagnitudeDescription extends MAElementDescription
 
   get min()
   {
-    if (typeof(this._min) === 'undefined')
+    if (typeof(this.#min) === 'undefined')
     {
       return this.constructor.defaultMin();
     }
-    return this._min;
+    return this.#min;
   }
 
   set min(val)
   {
-    this._min = val;
+    this.#min = val;
   }
 
   static defaultMin()
@@ -60,19 +60,19 @@ export class MAMagnitudeDescription extends MAElementDescription
 
   setMinMax(minVal, maxVal)
   {
-    this._min = minVal;
-    this._max = maxVal;
+    this.#min = minVal;
+    this.#max = maxVal;
   }
 
   get rangeErrorMessage()
   {
-    if (typeof(this._rangeErrorMessage) !== 'undefined')
+    if (typeof(this.#rangeErrorMessage) !== 'undefined')
     {
-      return this._rangeErrorMessage;
+      return this.#rangeErrorMessage;
     }
 
-    const minVal = this._min;
-    const maxVal = this._max;
+    const minVal = this.#min;
+    const maxVal = this.#max;
 
     if (typeof(minVal) !== 'undefined')
     {
@@ -94,7 +94,7 @@ export class MAMagnitudeDescription extends MAElementDescription
 
   set rangeErrorMessage(message)
   {
-    this._rangeErrorMessage = message;
+    this.#rangeErrorMessage = message;
   }
 
   validateSpecific(model)
