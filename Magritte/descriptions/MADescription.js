@@ -6,6 +6,10 @@ import { MARequiredError } from '../errors/MARequiredError.js';
 
 export class MADescription
 {
+  constructor(args) {
+    this.initWithArgs(args);
+  }
+
   static isAbstract() {
     return true;
   }
@@ -26,10 +30,27 @@ export class MADescription
   #multipleErrorsMessage = undefined;
   #conflictErrorMessage = undefined;
 
-
-  constructor(args) {
-    if (args) for (const [key, value] of Object.entries(args)) {
-      this[key] = value;
+  initWithArgs(args)
+  {
+    /*
+      Из-за реализации механизма наследования в JS, мы не можем установить приватные поля объекта-наследника в процессе
+      выполнения конструктора-родителя. Таким образом, написать общий код инициализации полей в конструкторе базового
+      класса невозможно - возникает исключение TypeError при попытке записи свойства наследника. Обходным путём
+      явлется вызов метода initWithArgs в конструкторе каждого класса-наследника, в котором имеются новые свойства.
+    */
+    if (args) for (const [key, value] of Object.entries(args))
+    {
+      try
+      {
+        this[key] = value;
+      }
+      catch (e)
+      {
+        if (!(e instanceof TypeError))
+        {
+          throw e;
+        }
+      }
     }
   }
 

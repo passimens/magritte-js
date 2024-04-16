@@ -5,6 +5,11 @@ import { MARangeError } from '../errors/MARangeError.js';
 
 export class MAMagnitudeDescription extends MAElementDescription
 {
+  constructor(args) {
+    super(args);
+    this.initWithArgs(args);
+  }
+
   isSortable() {
     return true
   }

@@ -5,6 +5,11 @@ import { MAStringDescription } from './MAStringDescription.js';
 
 export class MAReferenceDescription extends MAElementDescription
 {
+  constructor(args) {
+    super(args);
+    this.initWithArgs(args);
+  }
+
   #reference = undefined;
 
   get reference() {

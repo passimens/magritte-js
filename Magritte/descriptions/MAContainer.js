@@ -4,17 +4,18 @@ import { MADescription } from './MADescription.js';
 
 export class MAContainer extends MADescription
 {
+  constructor(args)
+  {
+    super(args);
+    this.initWithArgs(args);
+    this.#children = this.constructor.defaultCollection();
+  }
+
   static isAbstract() {
     return false;
   }
 
   #children = undefined;
-
-  constructor(args)
-  {
-    super(args);
-    this.#children = this.constructor.defaultCollection();
-  }
 
   clone()
   {

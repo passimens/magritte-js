@@ -6,6 +6,11 @@ import { MAStringWriterVisitor } from '../visitors/MAStringWriterVisitor.js';
 
 export class MAElementDescription extends MADescription
 {
+  constructor(args) {
+    super(args);
+    this.initWithArgs(args);
+  }
+
   #default = undefined;
   #stringReader = undefined;
   #stringWriter = undefined;

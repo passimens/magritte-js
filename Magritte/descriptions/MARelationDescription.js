@@ -5,7 +5,13 @@ import { MAPriorityContainer } from './MAPriorityContainer.js';
 
 export class MARelationDescription extends MAReferenceDescription
 {
-  get reference() {
+  constructor(args) {
+    super(args);
+    this.initWithArgs(args);
+  }
+
+  get reference()
+  {
     let result = super.reference;
     if (result === undefined)
     {

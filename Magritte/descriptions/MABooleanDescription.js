@@ -4,13 +4,18 @@ import { MAElementDescription } from './MAElementDescription.js';
 
 export class MABooleanDescription extends MAElementDescription
 {
-  #trueString = undefined;
-  #falseString = undefined;
+  constructor(args) {
+    super(args);
+    this.initWithArgs(args);
+  }
 
   static isAbstract()
   {
     return false;
   }
+
+  #trueString = undefined;
+  #falseString = undefined;
 
   get trueString()
   {
