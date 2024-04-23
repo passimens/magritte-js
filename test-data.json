@@ -1,0 +1,52 @@
+{
+  "object":
+  {
+    "uid": 3,
+    "name": "Alex Kabanets",
+    "dob": "01.01.1990",
+    "height": 180.5
+  },
+  "descriptionChilds": [
+  {
+    "MAIntDescription":
+    {
+      "name": "uid",
+      "label": "Uid",
+      "visible": true
+    }
+  },
+  {
+    "MAStringDescription":
+    {
+      "name": "name",
+      "undefined": "N/A",
+      "comment": "comment name",
+      "priority": 1,
+      "required": true
+    }
+  },
+  {
+    "MADateAndTimeDescription":
+    {
+      "name": "dob",
+      "label": "Date of birth",
+      "priority": 0
+    }
+  },
+  {
+    "MAIntDescription":
+    {
+      "name": "height",
+      "label": "Height",
+      "priority": 2
+    }
+  },
+  {
+    "MADateAndTimeDescription":
+    {
+      "name": "last_updated",
+      "label": "Last Updated",
+      "visible": false
+    }
+  }]
+}
