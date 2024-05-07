@@ -6,47 +6,69 @@ import { MARequiredError } from '../errors/MARequiredError.js';
 
 export class MADescription
 {
-  constructor(init_props) {
-    this.#init_props = init_props;
+  constructor(init_props)
+  {
+    this.initializeProperties(init_props);
   }
 
   static isAbstract() {
     return true;
   }
 
-  #readOnly = this.getInitialPropertyValue('readOnly');
-  #required = this.getInitialPropertyValue('required');
-  #undefinedValue = this.getInitialPropertyValue('undefinedValue');
-  #name = this.getInitialPropertyValue('name');
-  #comment = this.getInitialPropertyValue('comment');
-  #group = this.getInitialPropertyValue('group');
-  #label = this.getInitialPropertyValue('label');
-  #priority = this.getInitialPropertyValue('priority');
-  #visible = this.getInitialPropertyValue('visible');
-  #conditions = this.getInitialPropertyValue('conditions');
-  #undefined = this.getInitialPropertyValue('undefined');
-  #validator = this.getInitialPropertyValue('validator');
-  #requiredErrorMessage = this.getInitialPropertyValue('requiredErrorMessage');
-  #multipleErrorsMessage = this.getInitialPropertyValue('multipleErrorsMessage');
-  #conflictErrorMessage = this.getInitialPropertyValue('conflictErrorMessage');
+  #readOnly = undefined;
+  #required = undefined;
+  #undefinedValue = undefined;
+  #name = undefined;
+  #comment = undefined;
+  #group = undefined;
+  #label = undefined;
+  #priority = undefined;
+  #visible = undefined;
+  #conditions = undefined;
+  #undefined = undefined;
+  #validator = undefined;
+  #requiredErrorMessage = undefined;
+  #multipleErrorsMessage = undefined;
+  #conflictErrorMessage = undefined;
 
-  #init_props = undefined;
-  getInitialPropertyValue(name)
+  initializeProperties(init_props)
   {
     /*
       Обращение к приватному полю (#field) в JS возможно только в контексте того класса, где оно объявлено.
       Кроме того, сеттеры и геттеры дочерних классов не работают в процессе выполнения конструктора базового объекта.
-      Поэтому вместо инициализации полей в конструкторе базового MADescription запоминается объект init_props,
-      из которого каждый дочерний класс берёт начальные значения своих приватных полей с помощью данного метода.
+      Поэтому помимо инициализации полей в конструкторе базового MADescription требуется вызвать initializeProperties
+      в конструкторе каждого дочернего класса.
     */
-    try
+    if (init_props)
     {
-      return this.#init_props[name];
+      for (const [key, value] of Object.entries(init_props))
+      {
+        try
+        {
+          this[key] = value;
+        }
+        catch { }
+      }
     }
-    catch (e)
+  }
+
+  getInitialPropertyValue(name)
+  {
+    const initializer = (init_props) =>
     {
-        return undefined;
+      let value;
+      try
+      {
+        value = init_props[name];
+      }
+      catch (e)
+      {
+        value = undefined;
+      }
+      this[`#${name}`] = value;
     }
+    this._initializers.push(initializer);
+    return undefined;
   }
 
   get type() {

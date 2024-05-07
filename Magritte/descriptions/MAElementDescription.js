@@ -6,9 +6,15 @@ import { MAStringWriterVisitor } from '../visitors/MAStringWriterVisitor.js';
 
 export class MAElementDescription extends MADescription
 {
-  #default = this.getInitialPropertyValue('default');
-  #stringReader = this.getInitialPropertyValue('stringReader');
-  #stringWriter = this.getInitialPropertyValue('stringWriter');
+  constructor(init_props)
+  {
+    super(init_props);
+    this.initializeProperties(init_props);
+  }
+
+  #default = undefined;
+  #stringReader = undefined;
+  #stringWriter = undefined;
 
   get default() {
     if (this.#default === undefined) {

@@ -8,13 +8,14 @@ export class MAContainer extends MADescription
   {
     super(init_props);
     this.#children = this.constructor.defaultCollection();
+    this.initializeProperties(init_props);
   }
 
   static isAbstract() {
     return false;
   }
 
-  #children = this.getInitialPropertyValue('children');
+  #children = undefined;
 
   clone()
   {

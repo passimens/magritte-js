@@ -5,7 +5,13 @@ import { MAStringDescription } from './MAStringDescription.js';
 
 export class MAReferenceDescription extends MAElementDescription
 {
-  #reference = this.getInitialPropertyValue('reference');
+  constructor(init_props)
+  {
+    super(init_props);
+    this.initializeProperties(init_props);
+  }
+
+  #reference = undefined;
 
   get reference() {
     if (this.#reference === undefined) {
