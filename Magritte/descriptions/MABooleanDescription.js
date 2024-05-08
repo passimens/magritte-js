@@ -4,13 +4,19 @@ import { MAElementDescription } from './MAElementDescription.js';
 
 export class MABooleanDescription extends MAElementDescription
 {
+  constructor(init_props)
+  {
+    super(init_props);
+    this.initializeProperties(init_props);
+  }
+
   static isAbstract()
   {
     return false;
   }
 
-  #trueString = this.getInitialPropertyValue('trueString');
-  #falseString = this.getInitialPropertyValue('falseString');
+  #trueString = undefined;
+  #falseString = undefined;
 
   get trueString()
   {
@@ -28,7 +34,7 @@ export class MABooleanDescription extends MAElementDescription
 
   static defaultTrueString()
   {
-       return defaultTrueStrings()[0];
+       return this.defaultTrueStrings()[0];
   }
 
   static defaultTrueStrings()
@@ -52,7 +58,7 @@ export class MABooleanDescription extends MAElementDescription
 
   static defaultFalseString()
   {
-       return defaultFalseStrings()[0];
+       return this.defaultFalseStrings()[0];
   }
 
   static defaultFalseStrings()
