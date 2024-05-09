@@ -11,6 +11,6 @@ export class MAFloatDescription extends MANumberDescription
 
   acceptMagritte(aVisitor)
   {
-    aVisitor.visitFloatDescription(this);
+    return aVisitor.visitFloatDescription(this);
   }
 }

@@ -11,6 +11,6 @@ export class MADateAndTimeDescription extends MAMagnitudeDescription
 
   acceptMagritte(aVisitor)
   {
-    aVisitor.visitDateAndTimeDescription(this);
+    return aVisitor.visitDateAndTimeDescription(this);
   }
 }

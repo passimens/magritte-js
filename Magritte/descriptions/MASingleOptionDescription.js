@@ -8,7 +8,8 @@ export class MASingleOptionDescription extends MAOptionDescription
     return false;
   }
 
-  acceptMagritte(aVisitor) {
-    aVisitor.visitSingleOptionDescription(this);
+  acceptMagritte(aVisitor)
+  {
+    return aVisitor.visitSingleOptionDescription(this);
   }
 }

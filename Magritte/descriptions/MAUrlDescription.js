@@ -6,6 +6,6 @@ export class MAUrlDescription extends MAElementDescription
 {
   acceptMagritte(aVisitor)
   {
-    aVisitor.visitUrlDescription(this);
+    return aVisitor.visitUrlDescription(this);
   }
 }

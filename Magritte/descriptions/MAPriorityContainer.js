@@ -28,6 +28,6 @@ export class MAPriorityContainer extends MAContainer
 
   acceptMagritte(aVisitor)
   {
-    aVisitor.visitPriorityContainer(this);
+    return aVisitor.visitPriorityContainer(this);
   }
 }

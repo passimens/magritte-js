@@ -8,7 +8,8 @@ export class MAToOneRelationDescription extends MARelationDescription
     return false;
   }
 
-  acceptMagritte(aVisitor) {
-    aVisitor.visitToOneRelationDescription(this);
+  acceptMagritte(aVisitor)
+  {
+    return aVisitor.visitToOneRelationDescription(this);
   }
 }

@@ -28,8 +28,9 @@ export class MAReferenceDescription extends MAElementDescription
     return new MAStringDescription();
   }
 
-  acceptMagritte(aVisitor) {
-    aVisitor.visitReferenceDescription(this);
+  acceptMagritte(aVisitor)
+  {
+    return aVisitor.visitReferenceDescription(this);
   }
 
 }

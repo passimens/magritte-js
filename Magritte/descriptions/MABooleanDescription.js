@@ -68,6 +68,6 @@ export class MABooleanDescription extends MAElementDescription
 
   acceptMagritte(aVisitor)
   {
-    aVisitor.visitBooleanDescription(this);
+    return aVisitor.visitBooleanDescription(this);
   }
 }

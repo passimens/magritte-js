@@ -33,6 +33,6 @@ export class MAMemoDescription extends MAStringDescription
 
   acceptMagritte(aVisitor)
   {
-    aVisitor.visitMemoDescription(this);
+    return aVisitor.visitMemoDescription(this);
   }
 }

@@ -29,8 +29,9 @@ export class MARelationDescription extends MAReferenceDescription
     return new MAPriorityContainer();
   }
 
-  acceptMagritte(aVisitor) {
-    aVisitor.visitRelationDescription(this);
+  acceptMagritte(aVisitor)
+  {
+    return aVisitor.visitRelationDescription(this);
   }
 
 }
