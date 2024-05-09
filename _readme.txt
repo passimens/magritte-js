@@ -10,3 +10,5 @@ self
 ._
 null
 None
+len(
+append(
