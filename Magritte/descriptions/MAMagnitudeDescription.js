@@ -119,6 +119,6 @@ export class MAMagnitudeDescription extends MAElementDescription
 
   acceptMagritte(aVisitor)
   {
-    aVisitor.visitMagnitudeDescription(this);
+    return aVisitor.visitMagnitudeDescription(this);
   }
 }

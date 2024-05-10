@@ -61,8 +61,9 @@ export class MAElementDescription extends MADescription
     return new MAStringWriterVisitor();
   }
 
-  acceptMagritte(aVisitor) {
-    aVisitor.visitElementDescription(this);
+  acceptMagritte(aVisitor)
+  {
+    return aVisitor.visitElementDescription(this);
   }
 
   writeString(aModel) {

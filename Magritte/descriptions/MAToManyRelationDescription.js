@@ -8,8 +8,9 @@ export class MAToManyRelationDescription extends MARelationDescription
     return false;
   }
 
-  acceptMagritte(aVisitor) {
-    aVisitor.visitToManyRelationDescription(this);
+  acceptMagritte(aVisitor)
+  {
+    return aVisitor.visitToManyRelationDescription(this);
   }
 
   validateRequired(model)

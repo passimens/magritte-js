@@ -338,7 +338,7 @@ export class MADescription
 
   acceptMagritte(aVisitor)
   {
-    aVisitor.visitDescription(this);
+    return aVisitor.visitDescription(this);
   }
 
   get requiredErrorMessage()

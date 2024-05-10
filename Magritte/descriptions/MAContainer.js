@@ -184,6 +184,6 @@ export class MAContainer extends MADescription
 
   acceptMagritte(aVisitor)
   {
-    aVisitor.visitContainer(this);
+    return aVisitor.visitContainer(this);
   }
 }

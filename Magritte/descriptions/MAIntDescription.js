@@ -11,6 +11,6 @@ export class MAIntDescription extends MANumberDescription
 
   acceptMagritte(aVisitor)
   {
-    aVisitor.visitIntDescription(this);
+    return aVisitor.visitIntDescription(this);
   }
 }
