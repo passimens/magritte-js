@@ -10,20 +10,20 @@ export class MAMemoDescription extends MAStringDescription
     this.initializeProperties(init_props);
   }
 
-  #lineCount = undefined;
+  _lineCount = undefined;
 
   get lineCount()
   {
-    if (this.#lineCount === undefined)
+    if (this._lineCount === undefined)
     {
       return this.constructor.defaultLineCount();
     }
-    return this.#lineCount;
+    return this._lineCount;
   }
 
   set lineCount(val)
   {
-    this.#lineCount = val;
+    this._lineCount = val;
   }
 
   static defaultLineCount()

@@ -15,60 +15,35 @@ export class MADescription
     return true;
   }
 
-  #readOnly = undefined;
-  #required = undefined;
-  #undefinedValue = undefined;
-  #name = undefined;
-  #comment = undefined;
-  #group = undefined;
-  #label = undefined;
-  #priority = undefined;
-  #visible = undefined;
-  #conditions = undefined;
-  #undefined = undefined;
-  #validator = undefined;
-  #requiredErrorMessage = undefined;
-  #multipleErrorsMessage = undefined;
-  #conflictErrorMessage = undefined;
+  _readOnly = undefined;
+  _required = undefined;
+  _undefinedValue = undefined;
+  _name = undefined;
+  _comment = undefined;
+  _group = undefined;
+  _label = undefined;
+  _priority = undefined;
+  _visible = undefined;
+  _conditions = undefined;
+  _undefined = undefined;
+  _validator = undefined;
+  _requiredErrorMessage = undefined;
+  _multipleErrorsMessage = undefined;
+  _conflictErrorMessage = undefined;
 
   initializeProperties(init_props)
   {
-    /*
-      Обращение к приватному полю (#field) в JS возможно только в контексте того класса, где оно объявлено.
-      Кроме того, сеттеры и геттеры дочерних классов не работают в процессе выполнения конструктора базового объекта.
-      Поэтому помимо инициализации полей в конструкторе базового MADescription требуется вызвать initializeProperties
-      в конструкторе каждого дочернего класса.
-    */
     if (init_props)
     {
       for (const [key, value] of Object.entries(init_props))
       {
         try
         {
-          this[key] = value;
+          this[`_${key}`] = value;
         }
         catch { }
       }
     }
-  }
-
-  getInitialPropertyValue(name)
-  {
-    const initializer = (init_props) =>
-    {
-      let value;
-      try
-      {
-        value = init_props[name];
-      }
-      catch (e)
-      {
-        value = undefined;
-      }
-      this[`#${name}`] = value;
-    }
-    this._initializers.push(initializer);
-    return undefined;
   }
 
   get type() {
@@ -76,14 +51,14 @@ export class MADescription
   }
 
   get readOnly() {
-    if (this.#readOnly === undefined) {
+    if (this._readOnly === undefined) {
       return this.constructor.defaultReadOnly();
     }
-    return this.#readOnly;
+    return this._readOnly;
   }
 
   set readOnly(val) {
-    this.#readOnly = val;
+    this._readOnly = val;
   }
 
   static defaultReadOnly() {
@@ -103,14 +78,14 @@ export class MADescription
   }
 
   get required() {
-    if (this.#required === undefined) {
+    if (this._required === undefined) {
       return this.constructor.defaultRequired();
     }
-    return this.#required;
+    return this._required;
   }
 
   set required(aBool) {
-    this.#required = aBool;
+    this._required = aBool;
   }
 
   static defaultRequired() {
@@ -131,17 +106,17 @@ export class MADescription
 
   get undefinedValue() {
     let result;
-    if (this.#undefinedValue === undefined) {
+    if (this._undefinedValue === undefined) {
       result = this.constructor.defaultUndefinedValue();
     } else {
-      result = this.#undefinedValue;
+      result = this._undefinedValue;
     }
 
     return (result === undefined) ? this.constructor.defaultUndefinedValue() : result;
   }
 
   set undefinedValue(anObject) {
-    this.#undefinedValue = anObject;
+    this._undefinedValue = anObject;
   }
 
   static defaultUndefinedValue() {
@@ -149,15 +124,15 @@ export class MADescription
   }
 
   get name() {
-    if (this.#name === undefined) {
+    if (this._name === undefined) {
       return this.constructor.defaultName();
     }
 
-    return this.#name;
+    return this._name;
   }
 
   set name(val) {
-    this.#name = val;
+    this._name = val;
   }
 
   static defaultName() {
@@ -165,15 +140,15 @@ export class MADescription
   }
 
   get comment() {
-    if (this.#comment === undefined) {
+    if (this._comment === undefined) {
       return this.constructor.defaultComment();
     }
 
-    return this.#comment;
+    return this._comment;
   }
 
   set comment(str) {
-    this.#comment = str;
+    this._comment = str;
   }
 
   static defaultComment() {
@@ -185,15 +160,15 @@ export class MADescription
   }
 
   get group() {
-    if (this.#group === undefined) {
+    if (this._group === undefined) {
       return this.constructor.defaultGroup();
     }
 
-    return this.#group;
+    return this._group;
   }
 
   set group(str) {
-    this.#group = str;
+    this._group = str;
   }
 
   static defaultGroup() {
@@ -201,15 +176,15 @@ export class MADescription
   }
 
   get label() {
-    if (this.#label === undefined) {
+    if (this._label === undefined) {
       return this.constructor.defaultLabel();
     }
 
-    return this.#label;
+    return this._label;
   }
 
   set label(str) {
-    this.#label = str;
+    this._label = str;
   }
 
   static defaultLabel() {
@@ -221,15 +196,15 @@ export class MADescription
   }
 
   get priority() {
-    if (this.#priority === undefined) {
+    if (this._priority === undefined) {
       return this.constructor.defaultPriority();
     }
 
-    return this.#priority;
+    return this._priority;
   }
 
   set priority(val) {
-    this.#priority = val;
+    this._priority = val;
   }
 
   static defaultPriority() {
@@ -237,15 +212,15 @@ export class MADescription
   }
 
   get visible() {
-    if (this.#visible === undefined) {
+    if (this._visible === undefined) {
       return this.constructor.defaultVisible();
     }
 
-    return this.#visible;
+    return this._visible;
   }
 
   set visible(val) {
-    this.#visible = val;
+    this._visible = val;
   }
 
   static defaultVisible() {
@@ -265,22 +240,22 @@ export class MADescription
   }
 
   get conditions() {
-    if (this.#conditions === undefined) {
-      this.#conditions = this.constructor.defaultConditions();
+    if (this._conditions === undefined) {
+      this._conditions = this.constructor.defaultConditions();
     }
 
-    return this.#conditions;
+    return this._conditions;
   }
 
   set conditions(conditions)
   {
-    if (this.#conditions === undefined) {
-      this.#conditions = this.constructor.defaultConditions();
+    if (this._conditions === undefined) {
+      this._conditions = this.constructor.defaultConditions();
       return;
     }
     else
     {
-      this.#conditions = [];
+      this._conditions = [];
 
       for (const item of conditions)
       {
@@ -311,17 +286,17 @@ export class MADescription
 
   get undefined() {
     let result;
-    if (this.#undefined === undefined) {
+    if (this._undefined === undefined) {
       result = this.constructor.defaultUndefined();
     } else {
-      result = this.#undefined;
+      result = this._undefined;
     }
 
     return (result === undefined) ? this.constructor.defaultUndefined() : result;
   }
 
   set undefined(str) {
-    this.#undefined = str;
+    this._undefined = str;
   }
 
   static defaultUndefined() {
@@ -343,16 +318,16 @@ export class MADescription
 
   get requiredErrorMessage()
   {
-    if (this.#requiredErrorMessage === undefined)
+    if (this._requiredErrorMessage === undefined)
     {
       return this.constructor.defaultRequiredErrorMessage();
     }
-    return this.#requiredErrorMessage;
+    return this._requiredErrorMessage;
   }
 
   set requiredErrorMessage(message)
   {
-    this.#requiredErrorMessage = message;
+    this._requiredErrorMessage = message;
   }
 
   static defaultRequiredErrorMessage(cls)
@@ -362,16 +337,16 @@ export class MADescription
 
   get multipleErrorsMessage()
   {
-    if (this.#multipleErrorsMessage === undefined)
+    if (this._multipleErrorsMessage === undefined)
     {
       return this.constructor.defaultMultipleErrorsMessage();
     }
-    return this.#multipleErrorsMessage;
+    return this._multipleErrorsMessage;
   }
 
   set multipleErrorsMessage(message)
   {
-    this.#multipleErrorsMessage = message;
+    this._multipleErrorsMessage = message;
   }
 
   static defaultMultipleErrorsMessage()
@@ -381,16 +356,16 @@ export class MADescription
 
   get conflictErrorMessage()
   {
-    if (this.#conflictErrorMessage === undefined)
+    if (this._conflictErrorMessage === undefined)
     {
       return this.constructor.defaultConflictErrorMessage();
     }
-    return this.#conflictErrorMessage;
+    return this._conflictErrorMessage;
   }
 
   set conflictErrorMessage(message)
   {
-    this.#conflictErrorMessage = message;
+    this._conflictErrorMessage = message;
   }
 
   static defaultConflictErrorMessage()
@@ -454,14 +429,14 @@ export class MADescription
   }
 
   get validator() {
-    if (this.#validator === undefined) {
-      this.#validator = this.constructor.defaultValidator();
+    if (this._validator === undefined) {
+      this._validator = this.constructor.defaultValidator();
     }
-    return this.#validator;
+    return this._validator;
   }
 
   set validator(validator) {
-    this.#validator = validator;
+    this._validator = validator;
   }
 
   static defaultValidator()

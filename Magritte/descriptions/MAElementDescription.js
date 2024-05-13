@@ -12,19 +12,19 @@ export class MAElementDescription extends MADescription
     this.initializeProperties(init_props);
   }
 
-  #default = undefined;
-  #stringReader = undefined;
-  #stringWriter = undefined;
+  _default = undefined;
+  _stringReader = undefined;
+  _stringWriter = undefined;
 
   get default() {
-    if (this.#default === undefined) {
+    if (this._default === undefined) {
       return this.constructor.defaultDefault();
     }
-    return this.#default;
+    return this._default;
   }
 
   set default(data) {
-    this.#default = data;
+    this._default = data;
   }
 
   static defaultDefault() {
@@ -32,14 +32,14 @@ export class MAElementDescription extends MADescription
   }
 
   get stringReader() {
-    if (this.#stringReader === undefined) {
+    if (this._stringReader === undefined) {
       return this.constructor.defaultStringReader();
     }
-    return this.#stringReader;
+    return this._stringReader;
   }
 
   set stringReader(data) {
-    this.#stringReader = data;
+    this._stringReader = data;
   }
 
   static defaultStringReader() {
@@ -47,14 +47,14 @@ export class MAElementDescription extends MADescription
   }
 
   get stringWriter() {
-    if (this.#stringWriter === undefined) {
+    if (this._stringWriter === undefined) {
       return this.constructor.defaultStringWriter();
     }
-    return this.#stringWriter;
+    return this._stringWriter;
   }
 
   set stringWriter(data) {
-    this.#stringWriter = data;
+    this._stringWriter = data;
   }
 
   static defaultStringWriter() {

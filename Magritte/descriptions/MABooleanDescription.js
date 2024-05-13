@@ -15,21 +15,21 @@ export class MABooleanDescription extends MAElementDescription
     return false;
   }
 
-  #trueString = undefined;
-  #falseString = undefined;
+  _trueString = undefined;
+  _falseString = undefined;
 
   get trueString()
   {
-      if (this.#trueString === undefined)
+      if (this._trueString === undefined)
       {
           return this.constructor.defaultTrueString();
       }
-      return this.#trueString
+      return this._trueString
   }
 
   set trueString(trueString)
   {
-      this.#trueString = trueString;
+      this._trueString = trueString;
   }
 
   static defaultTrueString()
@@ -44,16 +44,16 @@ export class MABooleanDescription extends MAElementDescription
 
   get falseString()
   {
-      if (this.#falseString === undefined)
+      if (this._falseString === undefined)
       {
           return this.constructor.defaultFalseString();
       }
-      return this.#falseString
+      return this._falseString
   }
 
   set falseString(falseString)
   {
-      this.#falseString = falseString;
+      this._falseString = falseString;
   }
 
   static defaultFalseString()

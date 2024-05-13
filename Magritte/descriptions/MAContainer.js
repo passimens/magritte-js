@@ -7,7 +7,7 @@ export class MAContainer extends MADescription
   constructor(init_props)
   {
     super(init_props);
-    this.#children = this.constructor.defaultCollection();
+    this._children = this.constructor.defaultCollection();
     this.initializeProperties(init_props);
   }
 
@@ -15,7 +15,7 @@ export class MAContainer extends MADescription
     return false;
   }
 
-  #children = undefined;
+  _children = undefined;
 
   clone()
   {
@@ -29,12 +29,12 @@ export class MAContainer extends MADescription
 
   get children()
   {
-    return this.#children;
+    return this._children;
   }
 
   setChildren(aCollection)
   {
-    this.#children = aCollection;
+    this._children = aCollection;
   }
 
   isContainer()
