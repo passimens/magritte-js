@@ -435,33 +435,26 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
   {
     const model = this.#getParentModel(context);
     const description = context.description;
-    let relations_list;
     let found;
     let subcontext_dump;
     let subcontext_dumps;
+    const relations_list = [];
     if (model === undefined)  // The MAToManyRelationDescription serialized data is the root model without enclosing DTO - special handling
     {
       const dump = context.source;
-      relations_list = [];
       this.#addValueForDump(dump, relations_list);
       found = true;
       subcontext_dump = dump;
     }
     else
     {
-      relations_list = this.readUsingWrapper(model, description);
+      this.writeUsingWrapper(model, description, relations_list);
       [found, subcontext_dump,] = this.#findMatchingSubcontextDump(context);
-      // special handling for JS model: there will be no default empty array
-      if (relations_list === undefined)
-      {
-        relations_list = [];
-        this.writeUsingWrapper(model, description, relations_list);
-      }
     }
     if (found)
     {
       subcontext_dumps = [];
-      relations_list.length = 0;
+      //relations_list.length = 0;
       for (const relation_dump_or_key of subcontext_dump)
       {
         const [inner_found, relation_dump] = this.#getDTOdumpByKey(relation_dump_or_key);
@@ -479,7 +472,7 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
     else
     {
       subcontext_dumps = [];
-      relations_list.length = 0;
+      //relations_list.length = 0;
       if (description.undefinedValue !== undefined)
       {
         relations_list.push(...description.undefinedValue);
@@ -533,14 +526,20 @@ export class MAReferencedDataHumanReadableDeserializer
     return { _name: description.name };
   }
 
+  _descriptor_walker = undefined;
+
+  constructor()
+  {
+    this._descriptor_walker = new MAHumanReadableInstantiateModelWalkerVisitor();
+  }
+
   instantiateHumanReadable(dump, description, dto_factory=undefined)
   {
     if (dto_factory === undefined)
     {
       dto_factory = this.constructor.default_dto_factory;
     }
-    const descriptorWalker = new MAHumanReadableInstantiateModelWalkerVisitor();
-    const model = descriptorWalker.instantiateModelHumanReadable(dump, description, dto_factory);
+    const model = this._descriptor_walker.instantiateModelHumanReadable(dump, description, dto_factory);
     return model;
   }
 
@@ -548,5 +547,155 @@ export class MAReferencedDataHumanReadableDeserializer
   {
     const dump = JSON.parse(serialized_str);
     return this.instantiateHumanReadable(dump, description, dto_factory);
+  }
+}
+
+
+class MADumpModelWalkerVisitor extends MADescriptorWalkerVisitor
+{
+  processElementDescriptionContext(context)
+  {
+    const model = context.source;
+    const description = context.description;
+    const value = this.readUsingWrapper(model, description);
+    return value;
+  }
+
+  processContainerContext(context)
+  {
+    const model = context.source;
+    const description = context.description;
+    const value = this.readUsingWrapper(model, description);
+    return value;
+  }
+
+  processToOneRelationContext(context)
+  {
+    const model = context.source;
+    const description = context.description;
+    const value = this.readUsingWrapper(model, description);
+    return value;
+  }
+
+  processToManyRelationContext(context)
+  {
+    const model = context.source;
+    const description = context.description;
+    const values = this.readUsingWrapper(model, description);
+    return values;
+  }
+
+  dumpModel(aModel, aDescription)
+  {
+    return this.walkDescription(aModel, aDescription);
+  }
+}
+
+class MAHumanReadableDumpModelWalkerVisitor extends MADumpModelWalkerVisitor
+{
+  _json_writer = undefined;
+
+  constructor()
+  {
+    super();
+    this._json_writer = MAValueJsonWriter();
+  }
+
+  _clear()
+  {
+    super._clear();
+    this._dump_result_by_context_index = new Map();
+    this._dump_is_already_emitted_by_context_index = new Set();
+  }
+
+  _emitDumpOnce(context)
+  {
+    const context_index = context.context_index;
+    if (this._dump_result_by_context_index.has(context_index) && !this._dump_is_already_emitted_by_context_index.has(context_index))
+    {
+      this._dump_is_already_emitted_by_context_index.add(context_index);
+      return this._dump_result_by_context_index.get(context_index);
+    }
+    else
+    {
+      return context_index;
+    }
+  }
+
+  visitElementDescription(aDescription)
+  {
+    const context = this._context;
+    super.visitElementDescription(aDescription);
+    const dumpResult = this._json_writer.write_json(context.source, aDescription);
+    this._dump_result_by_context_index.set(context.context_index, dumpResult);
+  }
+
+  visitContainer(aDescription)
+  {
+    const context = this._context;
+    super.visitContainer(aDescription);
+    const dumpResult = {'_key': context.context_index};
+    this._dump_result_by_context_index.set(context.context_index, dumpResult);
+    for (const subcontext of context.subcontexts)
+    {
+      if (this._shouldProcessDescription(subcontext.description))
+      {
+        dumpResult[subcontext.description.name] = this._dump_result_by_context_index.get(subcontext.context_index);
+      }
+    }
+  }
+
+  visitToOneRelationDescription(aDescription)
+  {
+    const context = this._context;
+    super.visitToOneRelationDescription(aDescription);
+    const subcontext = context.subcontexts[0];
+    const dumpResult = this._emitDumpOnce(subcontext);
+    this._dump_result_by_context_index.set(context.context_index, dumpResult);
+  }
+
+  visitToManyRelationDescription(aDescription)
+  {
+    const context = this._context;
+    super.visitToManyRelationDescription(aDescription);
+    const dumpResult = [];
+    this._dump_result_by_context_index.set(context.context_index, dumpResult);
+    for (const subcontext of context.subcontexts)
+    {
+      const subResult = this._emitDumpOnce(subcontext);
+      dumpResult.push(subResult);
+    }
+  }
+
+  dumpModelHumanReadable(aModel, aDescription)
+  {
+    this.dumpModel(aModel, aDescription);
+    if (this._dump_result_by_context_index.has(0))
+    {
+      return this._dump_result_by_context_index.get(0);
+    }
+    return undefined;
+  }
+}
+
+export class MAReferencedDataHumanReadableSerializer
+{
+  _descriptor_walker = undefined;
+
+  constructor()
+  {
+    this._descriptor_walker = new MAHumanReadableDumpModelWalkerVisitor();
+  }
+
+  dumpHumanReadable(model, description)
+  {
+    return this._descriptor_walker.dumpModelHumanReadable(model, description);
+  }
+
+  serializeHumanReadable(model, description)
+  {
+    const dump = this.dumpHumanReadable(model, description);
+    const serialized_str = JSON.stringify(dump);
+    return serialized_str;
   }
 }
