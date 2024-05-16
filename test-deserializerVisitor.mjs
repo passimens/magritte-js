@@ -19,11 +19,4 @@ function deserializeHost()
   throw TypeError();
 }
 
-function deserializePort()
-{
-  const descriptionProvider = new NetModelDescriptors();
-  const portDescription = descriptionProvider.factByName('Port');
-}
-
 deserializeHost();
-deserializePort();
