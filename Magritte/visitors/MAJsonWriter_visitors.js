@@ -81,7 +81,7 @@ export class MAValueJsonWriter extends MAVisitor
   {
     try
     {
-      json.dumps(src);
+      JSON.stringify(src);
     }
     catch (err)
     {
@@ -92,12 +92,6 @@ export class MAValueJsonWriter extends MAVisitor
 
   #model = undefined;
   #json = undefined;
-
-  constructor()
-  {
-    this.#model = undefined;
-    this.#json = undefined;
-  }
 
   write_json(model, description)
   {

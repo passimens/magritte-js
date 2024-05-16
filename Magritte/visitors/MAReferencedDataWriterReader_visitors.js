@@ -2,7 +2,7 @@
 import { MAContainer } from '../descriptions/MAContainer.js';
 import { MAToOneRelationDescription } from '../descriptions/MAToOneRelationDescription.js';
 import { MAVisitor } from './MAVisitor.js';
-import { MAValueJsonReader } from './MAJsonWriter_visitors.js';
+import { MAValueJsonReader, MAValueJsonWriter } from './MAJsonWriter_visitors.js';
 
 
 class MADescriptorWalkerVisitorContext
@@ -87,20 +87,20 @@ class MADescriptorWalkerVisitor extends MAVisitor
     return clone;
   }
 
-  #shouldProcessDescription(description)
+  _shouldProcessDescription(description)
   {
     return description.isVisible() && !description.isReadOnly();
   }
 
-  #shouldSkipDescription(description)
+  _shouldSkipDescription(description)
   {
-    return !this.#shouldProcessDescription(description);
+    return !this._shouldProcessDescription(description);
   }
 
   #walkFromCurrent()
   {
     const description = this._context.description;
-    if (this.#shouldSkipDescription(description))
+    if (this._shouldSkipDescription(description))
     {
       return;
     }
@@ -146,6 +146,7 @@ class MADescriptorWalkerVisitor extends MAVisitor
       subcontext.parent_context = context;
       subcontext.source = subsource;
       subcontext.description = description.reference;
+      this.putIdentityAccessorAttachment(subcontext.description);
       this._contexts_by_source_index.set(subsource_index, subcontext);
       this.#walkFromCurrent();
     }
@@ -172,6 +173,7 @@ class MADescriptorWalkerVisitor extends MAVisitor
           subcontext.parent_context = context;
           subcontext.source = subsource;
           subcontext.description = description.reference;
+          this.putIdentityAccessorAttachment(subcontext.description);
           this._contexts_by_source_index.set(subsource_index, subcontext);
           this.#walkFromCurrent();
         }
@@ -201,7 +203,8 @@ class MADescriptorWalkerVisitor extends MAVisitor
       subcontext_description = this.#descriptionClone(description.reference);
     }
     subcontext_description.name = description.name;
-    subcontext_description.accessor = description.accessor;
+    //subcontext_description.accessor = description.accessor;
+    this.copyDescriptionAttachments(subcontext_description, description);
 
     context.description = subcontext_description;
 
@@ -234,7 +237,7 @@ class MADescriptorWalkerVisitor extends MAVisitor
     this.#createEmptyContext();
     this._context.source = aSource;
     this._context.description = this.#descriptionClone(aDescription);
-    this._descriptions_attachments.set(this._context.description, { accessor: 'MAIdentityAccessor' });
+    this.putIdentityAccessorAttachment(this._context.description);
     this.#walkFromCurrent();
   }
 
@@ -251,6 +254,19 @@ class MADescriptorWalkerVisitor extends MAVisitor
     this.#walkFromCurrent();
   }
 
+  putIdentityAccessorAttachment(description)
+  {
+    this._descriptions_attachments.set(description, { accessor: 'MAIdentityAccessor' });
+  }
+
+  copyDescriptionAttachments(destinationDescription, sourceDescription)
+  {
+    if (this._descriptions_attachments.has(sourceDescription))
+    {
+      this._descriptions_attachments.set(destinationDescription, this._descriptions_attachments.get(sourceDescription));
+    }
+  }
+
   writeUsingWrapper(model, description, value)
   {
     model[description.name] = value;
@@ -260,8 +276,8 @@ class MADescriptorWalkerVisitor extends MAVisitor
   {
     if (this._descriptions_attachments.has(description))
     {
-      const attachment = this._descriptions_attachments.get(model);
-      if (Object.hasOwn('attachment') && accessor['attachment'] == 'MAIdentityAccessor')
+      const attachment = this._descriptions_attachments.get(description);
+      if (Object.hasOwn(attachment, 'accessor') && attachment.accessor == 'MAIdentityAccessor')
       {
         return model;
       }
@@ -598,7 +614,7 @@ class MAHumanReadableDumpModelWalkerVisitor extends MADumpModelWalkerVisitor
   constructor()
   {
     super();
-    this._json_writer = MAValueJsonWriter();
+    this._json_writer = new MAValueJsonWriter();
   }
 
   _clear()
