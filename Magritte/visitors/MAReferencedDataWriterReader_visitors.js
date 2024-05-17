@@ -259,6 +259,16 @@ class MADescriptorWalkerVisitor extends MAVisitor
     this._descriptions_attachments.set(description, { accessor: 'MAIdentityAccessor' });
   }
 
+  hasIdentityAccessorAttachment(description)
+  {
+    if (this._descriptions_attachments.has(description))
+    {
+      const attachment = this._descriptions_attachments.get(description);
+      return (Object.hasOwn(attachment, 'accessor') && attachment.accessor == 'MAIdentityAccessor');
+    }
+    return false;
+  }
+
   copyDescriptionAttachments(destinationDescription, sourceDescription)
   {
     if (this._descriptions_attachments.has(sourceDescription))
@@ -274,13 +284,9 @@ class MADescriptorWalkerVisitor extends MAVisitor
 
   readUsingWrapper(model, description)
   {
-    if (this._descriptions_attachments.has(description))
+    if (this.hasIdentityAccessorAttachment(description))
     {
-      const attachment = this._descriptions_attachments.get(description);
-      if (Object.hasOwn(attachment, 'accessor') && attachment.accessor == 'MAIdentityAccessor')
-      {
-        return model;
-      }
+      return model;
     }
     const value = model[description.name];
     if (value === undefined)
