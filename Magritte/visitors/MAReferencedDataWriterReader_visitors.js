@@ -545,7 +545,7 @@ export class MAReferencedDataHumanReadableDeserializer
 {
   static default_dto_factory(description)
   {
-    return { _name: description.name };
+    return { '-x-magritte-name': description.name };
   }
 
   _descriptor_walker = undefined;
