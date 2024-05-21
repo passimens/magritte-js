@@ -13,7 +13,7 @@ import { MAToManyRelationDescription } from '../descriptions/MAToManyRelationDes
 import { MAToOneRelationDescription } from '../descriptions/MAToOneRelationDescription.js';  
 
 import { MAVisitor } from './MAVisitor.js';
-import { MAValueJsonReader, MAValueJsonWriter } from './MAJsonWriter_visitors.js';
+import { MAValueJsonReader, MAValueJsonWriter } from './MAJson_visitors.js';
 
 
 class MADescriptorWalkerVisitorContext
