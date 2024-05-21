@@ -53,7 +53,7 @@ export class MAValueJsonReader extends MAVisitor
   visitReferenceDescription(description)
   {
     throw new TypeError(
-      `MAValueJsonReader cannot encode using reference description.
+      `MAValueJsonReader cannot decode using reference description.
       Only scalar values are allowed.`
     );
   }
@@ -61,7 +61,7 @@ export class MAValueJsonReader extends MAVisitor
   visitContainer(description)
   {
     throw new TypeError(
-      `MAValueJsonReader cannot encode using container description.
+      `MAValueJsonReader cannot decode using container description.
       Only scalar values are allowed.`
     );
   }
