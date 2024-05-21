@@ -16,6 +16,30 @@ import { MAVisitor } from './MAVisitor.js';
 import { MAValueJsonReader, MAValueJsonWriter } from './MAJson_visitors.js';
 
 
+/*
+  Terms:
+
+    "dump" - procedure of conversion of the given instance tree that possibly have cyclic references
+      to a flat structure that represents and looks like the input when possible, but replaces cyclic
+      references to its identifiers when needed.
+      The resulting flat structure also contains only generic data types that are capable of being encoded with json.
+      The instance tree can be reconstructed by the reverse procedure - "instantiate".
+
+    "instantiate" - procedure of obtaining of instance tree with reconstruction of the possible cyclic references
+      out of a flat structure (got by "dump").
+
+    "serialize" - procedure of obtaining a detached string value capable of being transferred via some transport
+      and even between different runtimes out of a given instance tree that possibly have cyclic references.
+      Effectively it is "dump" and then JSON.stringify.
+      The instance tree can be reconstructed by the reverse procedure - "deserialize".
+
+    "deserialize" - procedure of obtaining of instance tree with reconstruction of the possible cyclic references
+      out of a given string value (got by "serialize") received from somewhere.
+      Effectively it is JSON.parse and then "instantiate".
+
+*/
+
+
 class MADescriptorWalkerVisitorContext
 {
   parent_context = undefined;
