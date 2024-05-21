@@ -42,14 +42,7 @@ export class MAValueJsonReader extends MAVisitor
 
   visitDateDescription(description)
   {
-    if (this.#json_value === undefined)
-    {
-      this.#decoded_value = description.undefinedValue;
-    }
-    else
-    {
-      this.#decoded_value = new Date(this.#json_value);
-    }
+    this.visitDateAndTimeDescription(description);
   }
 
   visitTimeDescription(description)
