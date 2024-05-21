@@ -57,3 +57,8 @@ import { PrintVisitor, printModel } from './test-printVisitor.mjs';
   const dto_ports = deserializer.deserializeHumanReadable(serialized_str_ports, portsDescriptor);
   console.log(dto_ports);
   console.log(host.ports.length, dto_ports.length);
+
+
+  //const serialized_hostDescriptor = {"-x-magritte-key":0,"-x-magritte-class":"MAContainer","name":"Host","label":"Host model","group":null,"comment":null,"priority":0,"undefined":"","undefinedValue":null,"readOnly":false,"visible":true,"required":false,"children":[{"-x-magritte-key":15,"-x-magritte-class":"MAStringDescription","name":"ip","label":"IP Address","group":null,"comment":null,"priority":0,"default":null,"undefined":"","undefinedValue":null,"readOnly":false,"visible":true,"required":true},{"-x-magritte-key":30,"-x-magritte-class":"MAToManyRelationDescription","name":"ports","label":"Ports","group":null,"comment":null,"priority":0,"default":null,"undefined":"","undefinedValue":null,"readOnly":false,"visible":true,"required":true}]};
+  //const serialized_str_hostDescriptor = JSON.stringify(serialized_hostDescriptor);
+  //const dto_hostDescriptor = deserializer.deserializeHumanReadable(serialized_str_hostDescriptor, undefined);

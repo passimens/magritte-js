@@ -1,6 +1,17 @@
 ﻿
-import { MAContainer } from '../descriptions/MAContainer.js';
-import { MAToOneRelationDescription } from '../descriptions/MAToOneRelationDescription.js';
+import { MABooleanDescription } from '../descriptions/MABooleanDescription.js';        
+import { MAContainer } from '../descriptions/MAContainer.js';                 
+import { MADateAndTimeDescription } from '../descriptions/MADateAndTimeDescription.js';    
+import { MADateDescription } from '../descriptions/MADateDescription.js';           
+import { MAFloatDescription } from '../descriptions/MAFloatDescription.js';          
+import { MAIntDescription } from '../descriptions/MAIntDescription.js';            
+import { MAPriorityContainer } from '../descriptions/MAPriorityContainer.js';         
+import { MASingleOptionDescription  } from '../descriptions/MASingleOptionDescription.js';   
+import { MAStringDescription  } from '../descriptions/MAStringDescription.js';         
+import { MATimeDescription } from '../descriptions/MATimeDescription.js';           
+import { MAToManyRelationDescription } from '../descriptions/MAToManyRelationDescription.js'; 
+import { MAToOneRelationDescription } from '../descriptions/MAToOneRelationDescription.js';  
+
 import { MAVisitor } from './MAVisitor.js';
 import { MAValueJsonReader, MAValueJsonWriter } from './MAJsonWriter_visitors.js';
 
@@ -300,6 +311,38 @@ class MADescriptorWalkerVisitor extends MAVisitor
 
 class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVisitor
 {
+  static default_magritte_classes(magritte_class)
+  {
+    switch (magritte_class)
+    {
+      case 'MABooleanDescription':
+        return new MABooleanDescription();
+      case 'MAContainer':
+        return new MAContainer();
+      case 'MADateAndTimeDescription':
+        return new MADateAndTimeDescription();
+      case 'MADateDescription':
+        return new MADateDescription();
+      case 'MAFloatDescription':
+        return new MAFloatDescription();
+      case 'MAIntDescription':
+        return new MAIntDescription();
+      case 'MAPriorityContainer':
+        return new MAPriorityContainer();
+      case 'MASingleOptionDescription':
+        return new MASingleOptionDescription();
+      case 'MAStringDescription':
+        return new MAStringDescription();
+      case 'MATimeDescription':
+        return new MATimeDescription();
+      case 'MAToManyRelationDescription':
+        return new MAToManyRelationDescription();
+      case 'MAToOneRelationDescription':
+        return new MAToOneRelationDescription();
+    }
+    return undefined;
+  }
+
   #json_reader = undefined;
   #dto_factory = undefined;
   _fulfilled_all_references = undefined;
@@ -329,8 +372,14 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
     const key = dump['-x-magritte-key'];
     if (!this._dtos_by_key.has(key))
     {
-      const dto = this.#dto_factory(dto_description);
+      const magritte_class = dump['-x-magritte-class'];
+      let dto = this.constructor.default_magritte_classes(magritte_class);
+      if (dto === undefined)
+      {
+        dto = this.#dto_factory(dto_description);
+      }
       dto['-x-magritte-key'] = key;
+      dto['-x-magritte-class'] = magritte_class;
       this._dtos_by_key.set(key, dto);
       this._dumps_by_key.set(key, dump);
       this.#addValueForDump(dump, dto);
@@ -545,7 +594,7 @@ export class MAReferencedDataHumanReadableDeserializer
 {
   static default_dto_factory(description)
   {
-    return { '-x-magritte-name': description.name };
+    return {};
   }
 
   _descriptor_walker = undefined;
@@ -657,7 +706,10 @@ class MAHumanReadableDumpModelWalkerVisitor extends MADumpModelWalkerVisitor
   {
     const context = this._context;
     super.visitContainer(aDescription);
-    const dumpResult = {'-x-magritte-key': context.context_index};
+    const dumpResult = {
+      '-x-magritte-key': context.context_index,
+      '-x-magritte-class': context.source.constructor.name,
+    };
     this._dump_result_by_context_index.set(context.context_index, dumpResult);
     for (const subcontext of context.subcontexts)
     {
