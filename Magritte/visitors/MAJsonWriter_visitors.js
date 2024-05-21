@@ -116,20 +116,20 @@ export class MAValueJsonWriter extends MAVisitor
 
   visitElementDescription(description)
   {
-    const value_jsonable = this.#model[description.name];
+    const value_jsonable = this.#model;
     this.#json = this.constructor._test_jsonable(value_jsonable);
   }
 
   visitDateAndTimeDescription(description)
   {
-    const value = this.#model[description.name];
+    const value = this.#model;
     const value_jsonable = (value) ? value.toISOString() : undefined;
     this.#json = this.constructor._test_jsonable(value_jsonable);
   }
 
   visitDateDescription(description)
   {
-    const value = this.#model[description.name];
+    const value = this.#model;
     const value_jsonable = (value) ? value.toISOString().split('T')[0] : undefined;
     this.#json = this.constructor._test_jsonable(value_jsonable);
   }

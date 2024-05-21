@@ -648,7 +648,8 @@ class MAHumanReadableDumpModelWalkerVisitor extends MADumpModelWalkerVisitor
   {
     const context = this._context;
     super.visitElementDescription(aDescription);
-    const dumpResult = this._json_writer.write_json(context.source, aDescription);
+    const value = this.readUsingWrapper(context.source, aDescription);
+    const dumpResult = this._json_writer.write_json(value, aDescription);
     this._dump_result_by_context_index.set(context.context_index, dumpResult);
   }
 
