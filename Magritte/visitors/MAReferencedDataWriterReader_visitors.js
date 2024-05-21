@@ -326,11 +326,11 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
 
   #getOrCreateDTO(dump, dto_description)
   {
-    const key = dump['_key'];
+    const key = dump['-x-magritte-key'];
     if (!this._dtos_by_key.has(key))
     {
       const dto = this.#dto_factory(dto_description);
-      dto['_key'] = key;
+      dto['-x-magritte-key'] = key;
       this._dtos_by_key.set(key, dto);
       this._dumps_by_key.set(key, dump);
       this.#addValueForDump(dump, dto);
@@ -340,7 +340,7 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
 
   #getOrCreateModel(dump, model_description)
   {
-    if (dump instanceof Object && Object.hasOwn(dump, '_key'))
+    if (dump instanceof Object && Object.hasOwn(dump, '-x-magritte-key'))
     {
       return this.#getOrCreateDTO(dump, model_description);
     }
@@ -657,7 +657,7 @@ class MAHumanReadableDumpModelWalkerVisitor extends MADumpModelWalkerVisitor
   {
     const context = this._context;
     super.visitContainer(aDescription);
-    const dumpResult = {'_key': context.context_index};
+    const dumpResult = {'-x-magritte-key': context.context_index};
     this._dump_result_by_context_index.set(context.context_index, dumpResult);
     for (const subcontext of context.subcontexts)
     {
