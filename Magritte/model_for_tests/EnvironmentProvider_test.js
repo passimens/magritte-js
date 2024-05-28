@@ -21,7 +21,7 @@ export class TestEnvironmentProvider
   {
     Object.assign(this.#portModel93,
         {
-          "_key": 93,
+          "-x-magritte-key": 93,
           "last_updated": "2024-03-04T15:09:57.582266",
           "ip4_addr": this.#hostModel89,
           "port_num": 80,
@@ -35,7 +35,7 @@ export class TestEnvironmentProvider
 
     Object.assign(this.#portModel100,
         {
-          "_key": 100,
+          "-x-magritte-key": 100,
           "last_updated": "2024-03-04T15:09:57.582288",
           "ip4_addr": this.#hostModel89,
           "port_num": 22,
@@ -49,7 +49,7 @@ export class TestEnvironmentProvider
 
     Object.assign(this.#hostModel89,
     {
-      "_key": 89,
+      "-x-magritte-key": 89,
       "last_updated": "2024-03-04T15:09:57.582255",
       "address": "192.168.0.1",
       "ports": [ this.#portModel93, this.#portModel100 ],
@@ -59,7 +59,7 @@ export class TestEnvironmentProvider
 
     Object.assign(this.#serviceModel4,
       {
-        "_key": 4,
+        "-x-magritte-key": 4,
         "name": "ssh",
         "standard_port": null,
         "applicable_weaknesses": [
@@ -71,7 +71,7 @@ export class TestEnvironmentProvider
 
     Object.assign(this.#serviceModel22,
       {
-        "_key": 22,
+        "-x-magritte-key": 22,
         "name": "https",
         "standard_port": null,
         "applicable_weaknesses": [
@@ -82,7 +82,7 @@ export class TestEnvironmentProvider
 
     Object.assign(this.#weaknessModel26,
           {
-            "_key": 26,
+            "-x-magritte-key": 26,
             "name": "acac",
             "weakness_type": "Misconfiguration",
             "details": "Access-Control-Allow-Credentials set to true",
@@ -94,7 +94,7 @@ export class TestEnvironmentProvider
 
     Object.assign(this.#weaknessModel15,
           {
-            "_key": 15,
+            "-x-magritte-key": 15,
             "name": "root",
             "weakness_type": "Misconfiguration",
             "details": "login as root possible",
@@ -106,7 +106,7 @@ export class TestEnvironmentProvider
 
     Object.assign(this.#weaknessModel8,
           {
-            "_key": 8,
+            "-x-magritte-key": 8,
             "name": "notimeout",
             "weakness_type": "Misconfiguration",
             "details": "immediate password re-request",

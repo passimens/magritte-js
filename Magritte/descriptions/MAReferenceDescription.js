@@ -11,17 +11,17 @@ export class MAReferenceDescription extends MAElementDescription
     this.initializeProperties(init_props);
   }
 
-  #reference = undefined;
+  _reference = undefined;
 
   get reference() {
-    if (this.#reference === undefined) {
+    if (this._reference === undefined) {
       return this.constructor.defaultReference();
     }
-    return this.#reference;
+    return this._reference;
   }
 
   set reference(aDescription) {
-    this.#reference = aDescription;
+    this._reference = aDescription;
   }
 
   static defaultReference() {

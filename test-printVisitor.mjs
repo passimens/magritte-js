@@ -8,7 +8,7 @@ import { NetModelDescriptors } from './Magritte/model_for_tests/ModelDescriptor_
 import { TestEnvironmentProvider } from './Magritte/model_for_tests/EnvironmentProvider_test.js';
 
 
-class PrintVisitor extends MAVisitor
+export class PrintVisitor extends MAVisitor
 {
   #model = undefined;
   #lines = undefined;
@@ -167,7 +167,7 @@ class PrintVisitor extends MAVisitor
 
 
 
-function printModel(aDescription, aModel)
+export function printModel(aDescription, aModel)
 {
   const visitor = new PrintVisitor();
   try

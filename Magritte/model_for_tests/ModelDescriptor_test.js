@@ -2,9 +2,12 @@
 import { MAContainer } from '../descriptions/MAContainer.js';
 import { MAToOneRelationDescription } from '../descriptions/MAToOneRelationDescription.js';
 import { MAToManyRelationDescription } from '../descriptions/MAToManyRelationDescription.js';
+import { MASingleOptionDescription } from '../descriptions/MASingleOptionDescription.js'
+import { MADateAndTimeDescription } from '../descriptions/MADateAndTimeDescription.js'
 import { MAStringDescription } from '../descriptions/MAStringDescription.js';
 import { MADateDescription } from '../descriptions/MADateDescription.js';
 import { MAIntDescription } from '../descriptions/MAIntDescription.js'
+import { MABooleanDescription } from '../descriptions/MABooleanDescription.js'
 
 
 export class NetModelDescriptors {
@@ -20,6 +23,8 @@ export class NetModelDescriptors {
     const portDesc = new MAContainer();
     const subnetDesc = new MAContainer();
     const weaknessDesc = new MAContainer();
+    const userDesc = new MAContainer();
+    const accountDesc = new MAContainer();
 
     this.#factList = [
       actorDesc,
@@ -28,16 +33,22 @@ export class NetModelDescriptors {
       linkDesc,
       portDesc,
       subnetDesc,
-      weaknessDesc
+      weaknessDesc,
+      userDesc,
+      accountDesc,
     ];
 
     // Descriptors for glossaries
     const protocolDesc = new MAContainer();
     const serviceDesc = new MAContainer();
+    const organizationDesc = new MAContainer();
+    const subscriptionPlanDesc = new MAContainer();
 
     this.#glossaryList = [
       protocolDesc,
-      serviceDesc
+      serviceDesc,
+      organizationDesc,
+      subscriptionPlanDesc,
     ];
 
     // serviceDesc.kind = Service;
@@ -315,6 +326,161 @@ export class NetModelDescriptors {
         new MAStringDescription({
           name: 'descriptive_label', label: 'Descriptive Label', readOnly: true
         })
+      ]
+    );
+
+    userDesc.name = 'User';
+    userDesc.label = 'User model';
+    userDesc.setChildren(
+      [
+        new MAStringDescription({
+            name: 'regnum',
+            label: 'RegNum',
+            required: true,
+            isPrimaryKey: true,
+        }),
+        new MAStringDescription({
+            name: 'fio',
+            label: 'FIO',
+            required: true,
+        }),
+        new MADateDescription({
+            name: 'dateofbirth',
+            label: 'DateOfBirth',
+            required: true,
+        }),
+        new MAStringDescription({
+            name: 'gender',
+            label: 'Gender',
+            required: true,
+        }),
+        new MAToOneRelationDescription({
+            name: 'organization',
+            label: 'Organization',
+            required: true,
+            reference: organizationDesc,
+        }),
+        new MADateDescription({
+            name: 'dateofadmission',
+            label: 'DateOfAdmission',
+            required: true,
+        }),
+        new MADateDescription({
+            name: 'dateofdeparture',
+            label: 'DateOfDeparture',
+            required: false,
+        }),
+        new MAToManyRelationDescription({
+            name: 'setofaccounts',
+            label: 'SetOfAccounts',
+            required: true,
+            reference: accountDesc,
+        }),
+        new MASingleOptionDescription({
+            name: 'plan',
+            label: 'Subscription Plan',
+            required: false,
+            //options: SubscriptionPlan.entries,
+            reference: subscriptionPlanDesc,
+        })
+      ]
+    );
+
+    accountDesc.name = 'Account';
+    accountDesc.label = 'Account model';
+    accountDesc.setChildren(
+      [
+        new MAStringDescription({
+            name: 'login',
+            label: 'Login',
+            required: true,
+            isPrimaryKey: true,
+        }),
+        //#!TODO Change to MAPasswordDescription when it is implemented
+        new MAStringDescription({
+            name: 'password',
+            label: 'Password',
+            required: true,
+        }),
+        //# !TODO Change to MAPasswordDescription when it is implemented
+        new MAStringDescription({
+            name: 'ntlm',
+            label: 'NTLM',
+        }),
+        new MADateAndTimeDescription({
+            name: 'reg_timestamp',
+            label: 'Timestamp Of Registration',
+            required: true,
+        }),
+        new MAIntDescription({
+            name: 'days',
+            label: 'Days valid',
+            required: true,
+        }),
+        new MAToOneRelationDescription({
+            name: 'port',
+            label: 'Port',
+            required: true,
+            reference: portDesc,
+        }),
+      ]
+    );
+
+    organizationDesc.name = 'Organization';
+    organizationDesc.label = 'Organization model';
+    organizationDesc.setChildren(
+      [
+        new MAStringDescription({
+            name: 'name',
+            label: 'Name',
+            required: true,
+            isPrimaryKey: true,
+        }),
+        new MAStringDescription({
+            name: 'address',
+            label: 'Address',
+            required: true,
+        }),
+        new MABooleanDescription({
+            name: 'active',
+            label: 'Active',
+            required: true,
+        }),
+        new MAToManyRelationDescription({
+            name: 'listusers',
+            label: 'List of Users',
+            required: true,
+            reference: userDesc,
+        }),
+        new MAToManyRelationDescription({
+            name: 'listcomp',
+            label: 'List of Computers',
+            required: true,
+            reference: hostDesc,
+        }),
+      ]
+    );
+
+    subscriptionPlanDesc.name = 'SubscriptionPlan';
+    subscriptionPlanDesc.label = 'Subscription Plan model';
+    subscriptionPlanDesc.setChildren(
+      [
+        new MAStringDescription({
+            name: 'name',
+            label: 'Name',
+            required: true,
+            isPrimaryKey: true,
+        }),
+        new MAIntDescription({
+            name: 'price',
+            label: 'Price (per month)',
+            required: true,
+        }),
+        new MAStringDescription({
+            name: 'description',
+            label: 'Description of the plan features',
+            required: false,
+        }),
       ]
     );
   }
