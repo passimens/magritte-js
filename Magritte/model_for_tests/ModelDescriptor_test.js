@@ -163,7 +163,7 @@ export class NetModelDescriptors {
         new MAToOneRelationDescription({
           name: 'service',
           label: 'Service',
-          required: true,
+          // required: true,
           // classes=[Service],
           reference: serviceDesc
         }),

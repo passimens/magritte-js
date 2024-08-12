@@ -25,7 +25,7 @@ export class TestEnvironmentProvider
           "last_updated": "2024-03-04T15:09:57.582266",
           "ip4_addr": this.#hostModel89,
           "port_num": 80,
-          "service": this.#serviceModel22,
+          "service": null,
           "weaknesses": [
             this.#weaknessModel26
           ],
