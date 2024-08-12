@@ -42,6 +42,7 @@ import { MAValueJsonReader, MAValueJsonWriter } from './MAJson_visitors.js';
 
 class MADescriptorWalkerVisitorContext
 {
+  parent_description = undefined;
   parent_context = undefined;
   context_index = undefined;
   source = undefined;
@@ -134,10 +135,22 @@ class MADescriptorWalkerVisitor extends MAVisitor
 
   #walkFromCurrent()
   {
-    const description = this._context.description;
+    const context = this._context;
+    const description = context.description;
     if (this._shouldSkipDescription(description))
     {
       return;
+    }
+    if (!context.source)
+    {
+      if (context.parent_description && context.parent_description.required)
+      {
+        throw new TypeError(`The required value ${context.parent_description.name} is null for ${context.parent_context.parent_description.name}`);
+      }
+      else
+      {
+        return;
+      }
     }
     description.acceptMagritte(this);
   }
@@ -161,6 +174,7 @@ class MADescriptorWalkerVisitor extends MAVisitor
     for (const subdescription of children)
     {
       const subcontext = this.#createEmptyContext();
+      subcontext.parent_description = description;
       subcontext.parent_context = context;
       context.subcontexts.push(subcontext);
       subcontext.source = subsource;
@@ -179,6 +193,7 @@ class MADescriptorWalkerVisitor extends MAVisitor
     {
       subcontext = this.#createEmptyContext();
       subcontext.parent_context = context;
+      subcontext.parent_description = description;
       subcontext.source = subsource;
       subcontext.description = description.reference;
       this.putIdentityAccessorAttachment(subcontext.description);
@@ -206,6 +221,7 @@ class MADescriptorWalkerVisitor extends MAVisitor
         {
           subcontext = this.#createEmptyContext();
           subcontext.parent_context = context;
+          subcontext.parent_description = description;
           subcontext.source = subsource;
           subcontext.description = description.reference;
           this.putIdentityAccessorAttachment(subcontext.description);
@@ -393,6 +409,17 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
 
   #getOrCreateDTO(dump, dto_description)
   {
+    if (!dump)
+    {
+      if (dto_description.required)
+      {
+        throw new TypeError(`The required value ${dto_description.name} is null`);
+      }
+      else
+      {
+        return undefined;
+      }
+    } 
     const key = dump['-x-magritte-key'];
     if (!this._dtos_by_key.has(key))
     {
@@ -710,6 +737,10 @@ class MAHumanReadableDumpModelWalkerVisitor extends MADumpModelWalkerVisitor
     {
       this._dump_is_already_emitted_by_context_index.add(context_index);
       return this._dump_result_by_context_index.get(context_index);
+    }
+    else if (!context.source)
+    {
+      return undefined;
     }
     else
     {
