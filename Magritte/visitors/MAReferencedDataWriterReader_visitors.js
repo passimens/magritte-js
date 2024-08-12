@@ -740,7 +740,7 @@ class MAHumanReadableDumpModelWalkerVisitor extends MADumpModelWalkerVisitor
     }
     else if (!context.source)
     {
-      return undefined;
+      return null;
     }
     else
     {
