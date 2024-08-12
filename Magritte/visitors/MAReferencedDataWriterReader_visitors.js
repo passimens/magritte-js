@@ -417,7 +417,7 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
       }
       else
       {
-        return undefined;
+        return null;
       }
     } 
     const key = dump['-x-magritte-key'];
@@ -621,7 +621,7 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
 
   instantiateModelHumanReadable(dump, description, dto_factory)
   {
-    if (dump == undefined)
+    if (dump === undefined)
     {
       return undefined;
     }
