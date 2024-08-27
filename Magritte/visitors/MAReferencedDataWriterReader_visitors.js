@@ -125,7 +125,7 @@ class MADescriptorWalkerVisitor extends MAVisitor
 
   _shouldProcessDescription(description)
   {
-    return description.isVisible() && !description.isReadOnly();
+    return description.isVisible();
   }
 
   _shouldSkipDescription(description)
