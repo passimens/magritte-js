@@ -17,7 +17,12 @@ export class MAValueJsonReader extends MAVisitor
 
   visit(description)
   {
-    if (this.#json_value !== description.undefinedValue)
+    // TODO: During refining undefinedValue logic we probably need to treat null as valid value for optional Relation fields
+    if (this.#json_value === undefined || this.#json_value === description.undefinedValue || this.#json_value === null)
+    {
+      this.#decoded_value = description.undefinedValue;
+    }
+    else
     {
       super.visit(description);
     }
@@ -30,14 +35,7 @@ export class MAValueJsonReader extends MAVisitor
 
   visitDateAndTimeDescription(description)
   {
-    if (this.#json_value === undefined)
-    {
-      this.#decoded_value = description.undefinedValue;
-    }
-    else
-    {
       this.#decoded_value = new Date(this.#json_value);
-    }
   }
 
   visitDateDescription(description)
