@@ -135,22 +135,14 @@ class MADescriptorWalkerVisitor extends MAVisitor
 
   #walkFromCurrent()
   {
-    const context = this._context;
-    const description = context.description;
+    const description = this._context.description;
     if (this._shouldSkipDescription(description))
     {
       return;
     }
-    if (!context.source)
+    if (this._context.source === undefined)
     {
-      if (context.parent_description && context.parent_description.required)
-      {
-        throw new TypeError(`The required value ${context.parent_description.name} is null for ${context.parent_context.parent_description.name}`);
-      }
-      else
-      {
-        return;
-      }
+      return;
     }
     description.acceptMagritte(this);
   }
@@ -409,17 +401,10 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
 
   #getOrCreateDTO(dump, dto_description)
   {
-    if (!dump)
+    if (dump === undefined)
     {
-      if (dto_description.required)
-      {
-        throw new TypeError(`The required value ${dto_description.name} is null`);
-      }
-      else
-      {
-        return null;
-      }
-    } 
+      return undefined;
+    }
     const key = dump['-x-magritte-key'];
     if (!this._dtos_by_key.has(key))
     {
