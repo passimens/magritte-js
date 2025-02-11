@@ -403,7 +403,7 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
   {
     if (dump === undefined)
     {
-      return undefined;
+      return dto_description.undefinedValue;
     }
     if (dump === null)
     {
@@ -503,7 +503,10 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
       {
         value = description.undefinedValue;
       }
-      this.writeUsingWrapper(model, description, value);
+      if (model !== undefined && model !== null)
+      {
+        this.writeUsingWrapper(model, description, value);
+      }
     }
     return undefined;
   }
@@ -517,29 +520,32 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
   processToOneRelationContext(context)
   {
     const model = this.#getParentModel(context);
-    const description = context.description;
-    const [found, subcontext_dump_or_key,] = this.#findMatchingSubcontextDump(context);
-    let submodel;
-    let subcontext_dump;
-    if (found)
+    if (model !== undefined && model !== null)
     {
-      let inner_found;
-      [inner_found, subcontext_dump,] = this.#getDTOdumpByKey(subcontext_dump_or_key);
-      if (!inner_found)
+      const description = context.description;
+      const [found, subcontext_dump_or_key,] = this.#findMatchingSubcontextDump(context);
+      let submodel;
+      let subcontext_dump;
+      if (found)
       {
-        this._fulfilled_all_references = false;
-        return undefined;
+        let inner_found;
+        [inner_found, subcontext_dump,] = this.#getDTOdumpByKey(subcontext_dump_or_key);
+        if (!inner_found)
+        {
+          this._fulfilled_all_references = false;
+          return undefined;
+        }
+        submodel = this.#getOrCreateDTO(subcontext_dump, description.reference);
       }
-      submodel = this.#getOrCreateDTO(subcontext_dump, description.reference);
+      else
+      {
+        subcontext_dump = undefined;
+        submodel = description.undefinedValue;
+      }
+      this.#addValueForDump(subcontext_dump, submodel);
+      this.writeUsingWrapper(model, description, submodel);
+      return subcontext_dump;
     }
-    else
-    {
-      subcontext_dump = undefined;
-      submodel = description.undefinedValue;
-    }
-    this.#addValueForDump(subcontext_dump, submodel);
-    this.writeUsingWrapper(model, description, submodel);
-    return subcontext_dump;
   }
 
   processToManyRelationContext(context)
@@ -556,6 +562,10 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
       this.#addValueForDump(dump, relations_list);
       found = true;
       subcontext_dump = dump;
+    }
+    else if (model === null)
+    {
+      return null;
     }
     else
     {
@@ -600,7 +610,7 @@ class MAHumanReadableInstantiateModelWalkerVisitor extends MADescriptorWalkerVis
       const submodel = this.#getOrCreateDTO(subcontext_dump, context.description.reference);
       this.#addValueForDump(subcontext_dump, submodel);
       const model = this.#getParentModel(context);
-      if (model !== undefined)
+      if (model !== undefined && model !== null)
       {
         this.writeUsingWrapper(model, context.description, submodel);
       }
