@@ -2,6 +2,7 @@
 import { MAVisitor } from './MAVisitor.js';
 import { MAModel } from '../MAModel.js';
 import { MAIntDescription } from '../descriptions/MAIntDescription.js';
+import { MAContainer } from '../descriptions/MAContainer.js';
 
 export class MAValueJsonWriter extends MAVisitor {
   constructor() {
