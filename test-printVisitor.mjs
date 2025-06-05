@@ -197,7 +197,7 @@ function printPort()
   printModel(portDescription, modelProvider.ports()[0]);
 }
 
-printHost();
-printPort();
+//printHost();
+//printPort();
 
 
