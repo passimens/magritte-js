@@ -12,7 +12,7 @@ class CyclicReferenceError extends Error {
     }
 }
 
-class DuplicateViewError extends Error {
+class DuplicateExtModelError extends Error {
     constructor(ctx, message) {
         super(message);
         this.ctx = ctx;
@@ -81,7 +81,7 @@ export class ModelReaderWalkerVisitor extends MADescriptionWalkerVisitor {
     }
 
     _processDuplicateModel(ctx) {
-        return ctx.view;
+        return ctx.ext_model;
     }
 
     walkDescription(model, description) {
@@ -96,7 +96,7 @@ export class ModelReaderWalkerVisitor extends MADescriptionWalkerVisitor {
             }
         }
 
-        let context = { model, description, modelKey: this.getModelKey(), elements: [], processed: false, view: undefined };
+        let context = { model, description, modelKey: this.getModelKey(), elements: [], processed: false, ext_model: undefined };
         this._visitedContexts.set(modelId, context);
         this._contextStack.push(context);
         this._currentContext = context;
@@ -106,13 +106,13 @@ export class ModelReaderWalkerVisitor extends MADescriptionWalkerVisitor {
         let updatedContext = this._contextStack.pop();
         updatedContext.processed = true;
         this._currentContext = this._contextStack.length ? this._contextStack[this._contextStack.length - 1] : undefined;
-        return updatedContext.view;
+        return updatedContext.extModel;
     }
 
     visitContainer(description) {
         this._currentContext.elements = [];
         this.visitAll(description.children);
-        this._currentContext.view = this._transformContainer(this._currentContext.elements, description);
+        this._currentContext.extModel = this._transformContainer(this._currentContext.elements, description);
     }
 
     visitToOneRelationDescription(description) {
@@ -121,12 +121,12 @@ export class ModelReaderWalkerVisitor extends MADescriptionWalkerVisitor {
             return;
         }
         if (relatedObj !== undefined) {
-            let relatedView = this.walkDescription(relatedObj, description.reference);
-            this._currentContext.elements.push([description, relatedView]);
-            this._currentContext.view = relatedView;
+            let relatedExtModel = this.walkDescription(relatedObj, description.reference);
+            this._currentContext.elements.push([description, relatedExtModel]);
+            this._currentContext.extModel = relatedExtModel;
         } else {
             this._currentContext.elements.push([description, undefined]);
-            this._currentContext.view = undefined;
+            this._currentContext.extModel = undefined;
         }
     }
 
@@ -136,9 +136,9 @@ export class ModelReaderWalkerVisitor extends MADescriptionWalkerVisitor {
             return;
         }
         if (relatedObjs !== undefined) {
-            let relatedViews = relatedObjs.map(obj => this.walkDescription(obj, description.reference));
-            this._currentContext.elements.push([description, relatedViews]);
-            this._currentContext.view = relatedViews;
+            let relatedExtModels = relatedObjs.map(obj => this.walkDescription(obj, description.reference));
+            this._currentContext.elements.push([description, relatedExtModels]);
+            this._currentContext.extModel = relatedExtModels;
         }
     }
 
@@ -158,9 +158,9 @@ export class ModelReaderWalkerVisitor extends MADescriptionWalkerVisitor {
         if (value === description.undefinedValue) {
             return
         }
-        let elementView = this._transformElement(value, description);
-        this._currentContext.elements.push([description, elementView]);
-        this._currentContext.view = elementView;
+        let elementExtModel = this._transformElement(value, description);
+        this._currentContext.elements.push([description, elementExtModel]);
+        this._currentContext.extModel = elementExtModel;
     }
 }
 
@@ -217,14 +217,14 @@ export class ModelWriterWalkerVisitor extends MADescriptionWalkerVisitor {
         this._dtoFactory = undefined;
     }
 
-    _processDuplicateView(ctxNew, ctxOld) {
-        throw new Error(`Duplicate view detected: ${JSON.stringify(ctxNew)} has same model key as ${JSON.stringify(ctxOld)}`);
+    _processDuplicateExtModel(ctxNew, ctxOld) {
+        throw new Error(`Duplicate extModel detected: ${JSON.stringify(ctxNew)} has same model key as ${JSON.stringify(ctxOld)}`);
     }
 
-    walkDescription(view, description) {
+    walkDescription(extModel, description) {
         if (!description) throw new Error("Description cannot be null");
 
-        let context = { view, description, elements: [], processed: false, model: undefined };
+        let context = { extModel, description, elements: [], processed: false, model: undefined };
         this._contextStack.push(context);
         this._currentContext = context;
 
@@ -239,7 +239,7 @@ export class ModelWriterWalkerVisitor extends MADescriptionWalkerVisitor {
         if (modelKey !== undefined) {
             if (this._visitedContexts.has(modelKey)) {
                 let ctxOld = this._visitedContexts.get(modelKey);
-                return this._processDuplicateView(updatedContext, ctxOld);
+                return this._processDuplicateExtModel(updatedContext, ctxOld);
             }
             this._visitedContexts.set(modelKey, updatedContext);
         }
@@ -264,10 +264,10 @@ export class ModelWriterWalkerVisitor extends MADescriptionWalkerVisitor {
         return undefined;
     }
 
-    _getElementView(description) {
-        let elementView = this._currentContext.elements.find(([desc, _]) => desc === description);
-        if (elementView) {
-            return elementView[1];
+    _getElementExtModel(description) {
+        let elementExtModel = this._currentContext.elements.find(([desc, _]) => desc === description);
+        if (elementExtModel) {
+            return elementExtModel[1];
         }
         return description.undefinedValue;
     }
@@ -275,21 +275,21 @@ export class ModelWriterWalkerVisitor extends MADescriptionWalkerVisitor {
     visitContainer(description) {
         let dtoFactory = this._dtoFactory || ModelWriterWalkerVisitor.defaultDtoFactory;
         this._currentContext.model = dtoFactory(description);
-        this._currentContext.elements = this._transformContainer(this._currentContext.view, description);
+        this._currentContext.elements = this._transformContainer(this._currentContext.extModel, description);
         this.visitAll(description.children);
     }
 
     visitToOneRelationDescription(description) {
-        let relatedView, relatedObj;
+        let relatedExtModel, relatedObj;
         if (this._currentContext.model !== undefined) {
-            relatedView = this._getElementView(description);
+            relatedExtModel = this._getElementExtModel(description);
         } else {
-            relatedView = this._currentContext.view;
+            relatedExtModel = this._currentContext.extModel;
         }
-        if (relatedView === description.undefinedValue) {
+        if (relatedExtModel === description.undefinedValue) {
             relatedObj = description.undefinedValue;
         } else {
-            relatedObj = this.walkDescription(relatedView, description.reference);
+            relatedObj = this.walkDescription(relatedExtModel, description.reference);
         }
         if (this._currentContext.model !== undefined) {
             MAModel.writeUsingWrapper(this._currentContext.model, description, relatedObj);
@@ -299,18 +299,18 @@ export class ModelWriterWalkerVisitor extends MADescriptionWalkerVisitor {
     }
 
     visitToManyRelationDescription(description) {
-        let relatedViews, relatedObjs;
+        let relatedExtModels, relatedObjs;
         if (this._currentContext.model !== undefined) {
-            relatedViews = this._getElementView(description);
+            relatedExtModels = this._getElementExtModel(description);
         } else {
-            relatedViews = this._currentContext.view;
+            relatedExtModels = this._currentContext.extModel;
         }
-        if (relatedViews === description.undefinedValue) {
+        if (relatedExtModels === description.undefinedValue) {
             relatedObjs = description.undefinedValue;
-        } else if (relatedViews === undefined) {
+        } else if (relatedExtModels === undefined) {
             relatedObjs = undefined;
         } else {
-            relatedObjs = relatedViews.map(view => this.walkDescription(view, description.reference));
+            relatedObjs = relatedExtModels.map(extModel => this.walkDescription(extModel, description.reference));
         }
         if (this._currentContext.model !== undefined) {
             MAModel.writeUsingWrapper(this._currentContext.model, description, relatedObjs);
@@ -331,13 +331,13 @@ export class ModelWriterWalkerVisitor extends MADescriptionWalkerVisitor {
     }
 
     visitElementDescription(description) {
-        let elementView, elementValue;
+        let elementExtModel, elementValue;
         if (this._currentContext.model !== undefined) {
-            elementView = this._getElementView(description);
-            elementValue = this._transformElement(elementView, description);
+            elementExtModel = this._getElementExtModel(description);
+            elementValue = this._transformElement(elementExtModel, description);
             MAModel.writeUsingWrapper(this._currentContext.model, description, elementValue);
         } else {
-            elementValue = this._transformElement(this._currentContext.view, description);
+            elementValue = this._transformElement(this._currentContext.extModel, description);
             this._currentContext.model = elementValue;
         }
     }
@@ -364,14 +364,14 @@ export class MAReferencedDataHumanReadableDeserializer extends ModelWriterWalker
     }
 
     visitContainer(description) {
-        if (! (this._currentContext.view instanceof Object)) {
-            this._currentContext.model = this._getModelByKey(this._currentContext.view);
+        if (! (this._currentContext.extModel instanceof Object)) {
+            this._currentContext.model = this._getModelByKey(this._currentContext.extModel);
             return;
         }
-        if (! ("-x-magritte-key" in this._currentContext.view)) {
-            throw new Error("Missing '-x-magritte-class' key in container view");
+        if (! ("-x-magritte-key" in this._currentContext.extModel)) {
+            throw new Error("Missing '-x-magritte-class' key in container extModel");
         }
-        this._currentContext.modelKey = this._currentContext.view["-x-magritte-key"];
+        this._currentContext.modelKey = this._currentContext.extModel["-x-magritte-key"];
         super.visitContainer(description);
     }
 
