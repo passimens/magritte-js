@@ -23,8 +23,7 @@ export class MAMagnitudeDescription extends MAElementDescription
   {
     const minVal = this._min;
     const maxVal = this._max;
-    return
-        (minVal === undefined || minVal <= val) &&
+    return (minVal === undefined || minVal <= val) &&
         (maxVal === undefined || maxVal >= val);
   }
 
