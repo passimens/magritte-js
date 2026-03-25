@@ -375,8 +375,8 @@ export class MADescription
 
   validate(model)
   {
-    visitor = this.validator;
-    errors = visitor.validateModelDescription(model, this);
+    const visitor = this.validator;
+    const errors = visitor.validateModelDescription(model, this);
     return errors;
   }
 
