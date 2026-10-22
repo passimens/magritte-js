@@ -92,7 +92,11 @@ export class MAValueJsonReader extends MAVisitor {
   }
 
   _write_to_model(description) {
-    if (this._model !== undefined && this._decoded_value !== description.undefinedValue) {
+    if (
+        this._model !== undefined
+        && this._decoded_value !== description.undefinedValue
+        && this._decoded_value !== undefined
+    ) {
       MAModel.writeUsingWrapper(this._model, description, this._decoded_value);
     }
   }
